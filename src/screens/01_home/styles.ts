@@ -40,10 +40,12 @@ export const styles = StyleSheet.create({
 
     cnjp_datails: {
         height: Dimensions.get('screen').height / 1.55,
+        width: '90%',
         margin: 10,
         borderRadius: 20,
         backgroundColor: '#fff',
         padding: 20,
-        gap: 10
+        gap: 10,
+        elevation: 20, shadowColor: '#000'
     }
 })
