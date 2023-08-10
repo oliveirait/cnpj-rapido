@@ -3,6 +3,7 @@ export declare global {
         interface RootParamList {
             home: any
             cnpj_viewer: any
+            config: any
         }
     }
 }

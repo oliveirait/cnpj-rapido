@@ -1,76 +1,78 @@
 import { useState } from "react"
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator } from "react-native"
-import axios from 'axios'
+import { View, Text, TextInput, ActivityIndicator, Alert } from "react-native"
+import { AntDesign } from '@expo/vector-icons';
 
+import { styles } from "./styles";
+import { ComponentButton } from "../../components/button";
 import { CnpjProps } from "../../@types/cnpj"
+import { CNPJ } from "../../services/api";
 
 
 export function Home () {
     const [cnpj, setCnpj] = useState('')
-    const [cnpj_result, set_cnpj_result] = useState({} as CnpjProps)
+    const [cnpj_result, set_cnpj_result] = useState({} as CnpjProps )
     const [loading, setLoading] = useState(false)
 
-    function changeCnpj (e: string) {
-        setCnpj(e)
-    }
 
     async function getCnpjData (cnpj: string) {
         setLoading(true)
         setTimeout(() => {
-            axios(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`)
-                .then((data) => set_cnpj_result(data.data))
+            CNPJ.get(cnpj)
+                .then((data) => {
+                    set_cnpj_result(data.data)
+                })
+                .catch(() => {
+                    console.warn('Cnpj nao encontrado ou invalido')
+                })
             setLoading(false)
-        }, 2000)
+        }, 1000)
+            
+    }
 
+    function inputText (input: string) {
+        setCnpj(input.trim())
     }
     
     return (
         <View style={styles.container}> 
-            <Text>Digite o CNPJ</Text>
+            <Text style={styles.title}>Insira o CNPJ</Text>
 
             <TextInput 
-                placeholder="CNPJ"
-                defaultValue={cnpj}
-                onChangeText={changeCnpj}
+                placeholder="Digite o numero do CNPJ"
+                value={cnpj}
+                cursorColor={'#000'}
+                onChangeText={inputText}
+                maxLength={18}
+                keyboardType="numeric"
                 style={styles.input}
             />
 
-            <TouchableOpacity style={styles.button} onPress={() => getCnpjData(cnpj)}>
-                {loading 
-                    ? <ActivityIndicator size={40} color={'#fff'}/> 
-                    : <Text style={styles.textButton}>Buscar</Text>
-                }
-                
-            </TouchableOpacity>
+            <ComponentButton.ButtonWrapper 
+                style={[{...styles.button, backgroundColor: cnpj.length !== 14 ? '#c2c2c2' : '#000'}]}
+                onPress={() => getCnpjData(cnpj)} 
+                disabled={cnpj.length !== 14 ? true : false}
+            >
+                <ComponentButton.ButtonIcon icon={ loading ? <Loading /> : <Icon /> } />
+                <ComponentButton.ButtonText text={ loading ? 'Buscando...' : 'Buscar' } style={styles.textButton}/>
+            </ComponentButton.ButtonWrapper>
 
-            <Text>{cnpj_result?.capital_social}</Text>
+            <View style={styles.cnjp_datails}>
+                <Text>{cnpj_result?.capital_social}</Text>
+                <Text>{cnpj_result?.razao_social}</Text>
+                <Text>{cnpj_result?.bairro}</Text>
+                <Text>{cnpj_result?.nome_fantasia}</Text>
+            </View>
+
+
         </View>
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center', justifyContent: 'center',
-        gap: 10
-    },
+const Loading = () => {
+    return <ActivityIndicator size={24} color={'#fff'}/> 
+}
 
-    input: {
-        width: '90%', height: 50,
-        borderWidth: 1, borderColor: '#000', borderRadius: 10,
-        paddingHorizontal: 10, paddingVertical: 4
-    },
+const Icon = () => {
+    return <AntDesign name="search1" size={18} color="white" />
+}
 
-    button: {
-        width: '90%', height: 50,
-        borderRadius: 10,
-        paddingHorizontal: 10, paddingVertical: 4,
-        backgroundColor: '#000',
-        alignItems: 'center', justifyContent: 'center'
-    },
-
-    textButton: {
-        textAlign: 'center',
-        color: '#fff'
-    }
-})
