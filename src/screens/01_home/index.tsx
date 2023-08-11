@@ -1,11 +1,14 @@
 import { useState } from "react"
-import { View, Text, TextInput, ActivityIndicator, Alert } from "react-native"
-import { AntDesign } from '@expo/vector-icons';
+import { View, Text, TextInput, Alert } from "react-native"
+
 
 import { styles } from "./styles";
 import { ComponentButton } from "../../components/button";
 import { CnpjProps } from "../../@types/cnpj"
 import { CNPJ } from "../../services/api";
+import { Loading } from "../../components/loading";
+import { AntiDesignIcon } from "../../components/icon/antidesign";
+import { checkNetwork } from "../../utils/network";
 
 
 export function Home () {
@@ -17,12 +20,20 @@ export function Home () {
 
 
     async function getCnpjData (cnpj: string) {
+        const netinfo = await checkNetwork()
+        if (!netinfo) {
+            return (
+                Alert.alert(
+                    'Sem internet', 'Verifique sua conexão',
+                    [{text: 'OK'}],
+                    {cancelable: true}
+                )
+            )
+        }
         setLoading(true)
         const cnpj_replaced = cnpj.replace(/[/.-]/g, '')
-        
         if (cnpj_replaced.length === 14) {
             CNPJ.get(cnpj_replaced)
-            
                 .then((data) => {
                     set_cnpj_result(data.data)
                 })
@@ -38,8 +49,7 @@ export function Home () {
 
                 .finally(() => {
                     setLoading(false)
-                })
-                    
+                })  
         }
 
         else {
@@ -50,8 +60,8 @@ export function Home () {
             )
             setLoading(false)
         }
-            
-    }
+    } 
+
 
     function inputText (input: string) {
         setCnpj(input.trim().replace(cnpj_regex, "$1.$2.$3/$4-$5"))
@@ -75,8 +85,9 @@ export function Home () {
                 style={[{...styles.button, backgroundColor: cnpj.length !== length_cnpj ? '#c2c2c2' : '#000'}]}
                 onPress={() => getCnpjData(cnpj)} 
                 disabled={cnpj.length !== length_cnpj ? true : false}
+                
             >
-                <ComponentButton.ButtonIcon icon={ loading ? <Loading /> : <Icon /> } />
+                <ComponentButton.ButtonIcon icon={ loading ? <Loading /> : <AntiDesignIcon /> } />
                 <ComponentButton.ButtonText text={ loading ? 'Buscando...' : 'Buscar' } style={styles.textButton}/>
             </ComponentButton.ButtonWrapper>
 
@@ -93,11 +104,6 @@ export function Home () {
     )
 }
 
-const Loading = () => {
-    return <ActivityIndicator size={24} color={'#fff'}/> 
-}
 
-const Icon = () => {
-    return <AntDesign name="search1" size={18} color="white" />
-}
+
 

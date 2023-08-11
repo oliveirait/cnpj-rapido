@@ -1,33 +1,54 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { Home } from '../../screens/01_home';
-import { Cnpj_Viewer } from '../../screens/02_cnpj_viewer';
-import { Config } from '../../screens/03_config';
+import { Historic } from '../../screens/03_historic';
 
 
 const Drawer = createDrawerNavigator()
 
+const headerConfig = {
+    screens: {
+        home: 'Início',
+        result: 'CNPJ',
+        historic: 'Histórico'
+    },
+    drawer: {
+        home: 'home',
+        result: 'result',
+        historic: 'historic'
+    }
+}
+
 
 const Tab = () => {
     return (
-        <Drawer.Navigator initialRouteName='home'>       
+        <Drawer.Navigator 
+            initialRouteName={headerConfig.drawer.home}
+            screenOptions={{
+                headerTitleAlign: 'center',
+                headerStyle: {
+                    elevation: 10, shadowColor: '#000',
+                }
+            }}
+        >       
             <Drawer.Screen 
-                name='home' 
+                name={headerConfig.drawer.home} 
                 component={Home} 
-                options={{headerTitle: "Inicio", title: "Inicio"}}
+                options={{
+                    headerTitle: headerConfig.screens.home, 
+                    title: headerConfig.screens.home
+                }}
             />
 
             <Drawer.Screen 
-                name='cnpj_viewer' 
-                component={Cnpj_Viewer} 
-                options={{headerTitle: "CNPJ", title: "CNPJ"}}
+                name={headerConfig.drawer.historic} 
+                component={Historic} 
+                options={{
+                    headerTitle: headerConfig.screens.historic, 
+                    title: headerConfig.screens.historic
+                }}
             />
 
-            <Drawer.Screen 
-                name='config' 
-                component={Config} 
-                options={{headerTitle: "Configuracoes", title: "Configuracoes"}}
-            />
         </Drawer.Navigator>
     )
 }

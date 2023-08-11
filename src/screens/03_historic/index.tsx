@@ -1,6 +1,6 @@
 import { View, Text } from "react-native"
 
-export function Cnpj_Viewer () {
+export function Historic () {
     return (
         <View> 
             <Text>CNPJ</Text>
