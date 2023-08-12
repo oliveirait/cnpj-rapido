@@ -8,8 +8,7 @@ interface ButtonIconProps {
 export const ButtonIcon = ({icon: icon}: ButtonIconProps) => {
     return (
         <>
-         {icon}
+            {icon}
         </>
     )
-
 }

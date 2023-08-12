@@ -1,6 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import Tab from "./tab_navigation"
-import Stack from './stack_navigation';
+import Stack from './stack_routes';
 
 
 export default function Routes () {

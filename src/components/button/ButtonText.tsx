@@ -5,9 +5,9 @@ interface ButtonTextProps extends TextProps {
     text: string
 }
 
-export function ButtonText ({text}: ButtonTextProps ) {
+export function ButtonText ({text, ...rest}: ButtonTextProps ) {
     return (
-        <Text style={{color: 'white'}}>
+        <Text {...rest}>
             {text}
         </Text>
     )
