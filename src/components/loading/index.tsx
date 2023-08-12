@@ -1,6 +1,10 @@
 import { ActivityIndicator } from "react-native"
 
+interface LoadingProps {
+    size: number
+    color: string
+}
 
-export const Loading = () => {
-    return <ActivityIndicator size={24} color={'#fff'}/> 
+export const Loading = ({size, color}: LoadingProps) => {
+    return <ActivityIndicator size={size} color={color}/> 
 }

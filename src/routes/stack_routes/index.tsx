@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Result } from "../../screens/02_result";
-import Tab from "../tab_routes";
+import TabRoutes from "../tab_routes";
 
 const { Navigator, Screen } = createNativeStackNavigator()
 
@@ -27,7 +27,7 @@ const StackRoutes = () => {
 
             <Screen 
                 name={screen.main.headerName}
-                component={Tab}
+                component={TabRoutes}
             />
 
             <Screen 
