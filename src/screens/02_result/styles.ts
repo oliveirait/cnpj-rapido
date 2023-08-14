@@ -2,6 +2,12 @@ import { StyleSheet } from "react-native"
 
 
 export const styles = StyleSheet.create({
+    container: {
+        flex: 1, 
+        alignItems: 'center', justifyContent: 'space-between', 
+        backgroundColor: '#fff'
+    },
+    
     cnjp_datails: {
         flex: 1,
         width: '100%',
@@ -53,6 +59,7 @@ export const styles = StyleSheet.create({
     textDescripionCard: {
         fontFamily: 'Regular', fontSize: 12,
         textAlign: 'center'
-    }
+    },
+
 
 })

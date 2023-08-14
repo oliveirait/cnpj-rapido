@@ -11,3 +11,5 @@ export default function App () {
         fontsLoad ? <Routes /> : <Loading size={14} color="#fff"/>
     )
 }
+
+

@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/app/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.oliveirafocs.cnpjrapido"
     },
     "web": {
       "favicon": "./src/assets/app/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fdfcdf26-973a-48db-be75-22b46d714a23"
+      }
     }
   }
 }

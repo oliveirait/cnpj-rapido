@@ -1,17 +1,15 @@
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, ScrollView } from "react-native";
 import { CnpjProps } from "../../@types/cnpj";
 import { TextHeader, TextTitle, TextDescription } from "../../components/text";
 import { styles } from "./styles";
+import { formatDate, getDate } from "../../utils/dateFormat";
 
 
 export function Result ({route}: any) {
     const cnpj: CnpjProps = route.params?.data
-    const data = new Date()
-    const day = data.getDay()
-    const month = data.getMonth()
-    const year = data.getFullYear()
 
     return (
+        <View style={styles.container}>
         <ScrollView style={styles.cnjp_datails}>
 
             <View style={styles.card}>
@@ -23,16 +21,19 @@ export function Result ({route}: any) {
                     <TextDescription text={cnpj.razao_social} />
 
                     <TextTitle text="CNPJ" />
-                    <TextDescription text={cnpj.cnpj} />
+                    <TextDescription text={cnpj.cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5")} />
+
+                    <TextTitle text="Porte" />
+                    <TextDescription text={cnpj.porte} />
 
                     <TextTitle text="Capital Social" />
-                    <TextDescription text={cnpj.capital_social} />
+                    <TextDescription text={`R$ ${cnpj.capital_social},00`} />
 
                     <TextTitle text="Data de Abertura" />
-                    <TextDescription text={cnpj.data_inicio_atividade} />
+                    <TextDescription text={formatDate(cnpj.data_inicio_atividade)} />
 
                     <TextTitle text="Tipo" />
-                    <TextDescription text={cnpj.identificador_matriz_filial === 1 ? 'Matriz' : 'Filial'} />
+                    <TextDescription text={cnpj.identificador_matriz_filial === 1 ? 'MATRIZ' : 'FILIAL'} />
 
                     <TextTitle text="Logradouro" />
                     <TextDescription text={cnpj.logradouro} />
@@ -49,11 +50,8 @@ export function Result ({route}: any) {
                     <TextTitle text="Telefone" />
                     <TextDescription text={`${cnpj.ddd_telefone_1} / ${cnpj.ddd_telefone_2}`} />
 
-                    <TextTitle text="E-mail" />
-                    <TextDescription text={cnpj.cnae_fiscal} />
-
                     <TextTitle text="Data da Consulta" />
-                    <TextDescription text={`${day}/${month}/${year}`} />
+                    <TextDescription text={getDate()} />
                     
                 </View>
             </View>
@@ -110,7 +108,11 @@ export function Result ({route}: any) {
                 }
             </View>
 
+
+
         </ScrollView>
+
+    </View>
 
     )
 } 
