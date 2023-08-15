@@ -3,13 +3,31 @@ import { CnpjProps } from "../../@types/cnpj";
 import { TextHeader, TextTitle, TextDescription } from "../../components/text";
 import { styles } from "./styles";
 import { formatDate, getDate } from "../../utils/dateFormat";
+import { useState } from "react";
 
 
 export function Result ({route}: any) {
     const cnpj: CnpjProps = route.params?.data
+    const [situacao_cor, set_situacao_cor] = useState('#000')
+
+    const situacao = () => {
+        let descricao = cnpj?.descricao_situacao_cadastral
+        if (descricao === 'ATIVA') {
+            set_situacao_cor('#008507')
+        } else if (descricao === 'SUSPENSA') {
+            set_situacao_cor('#dbdf00')
+        } else if (descricao === 'INAPTA') {
+            set_situacao_cor('#c70700')
+        } else if (descricao === 'BAIXADA') {
+            set_situacao_cor('#b90057')
+        } else {
+            set_situacao_cor('#5a5a5a')
+        }   
+    }
+
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} onLayout={situacao}>
         <ScrollView style={styles.cnjp_datails}>
 
             <View style={styles.card}>
@@ -17,38 +35,44 @@ export function Result ({route}: any) {
                     <TextHeader text="Informações Gerais" />
                 </View>
                 <View style={styles.viewDescriptionCard}>
+                    <TextTitle text="Situação" />
+                    <TextDescription text={cnpj?.descricao_situacao_cadastral} style={[{...styles.textTitleCard, color: situacao_cor}]}/>
+
                     <TextTitle text="Nome" />
-                    <TextDescription text={cnpj.razao_social} />
+                    <TextDescription text={cnpj?.razao_social} />
 
                     <TextTitle text="CNPJ" />
-                    <TextDescription text={cnpj.cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5")} />
+                    <TextDescription text={cnpj?.cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5")} />
 
                     <TextTitle text="Porte" />
-                    <TextDescription text={cnpj.porte} />
+                    <TextDescription text={cnpj?.porte} />
 
                     <TextTitle text="Capital Social" />
-                    <TextDescription text={`R$ ${cnpj.capital_social},00`} />
+                    <TextDescription text={`R$ ${cnpj?.capital_social},00`} />
 
                     <TextTitle text="Data de Abertura" />
                     <TextDescription text={formatDate(cnpj.data_inicio_atividade)} />
 
                     <TextTitle text="Tipo" />
-                    <TextDescription text={cnpj.identificador_matriz_filial === 1 ? 'MATRIZ' : 'FILIAL'} />
+                    <TextDescription text={cnpj?.descricao_identificador_matriz_filial} />
+
+                    <TextTitle text="Natureza Jurídica" />
+                    <TextDescription text={cnpj?.natureza_juridica} />
 
                     <TextTitle text="Logradouro" />
-                    <TextDescription text={cnpj.logradouro} />
+                    <TextDescription text={cnpj?.logradouro} />
 
                     <TextTitle text="Bairro" />
-                    <TextDescription text={cnpj.bairro} />
+                    <TextDescription text={cnpj?.bairro} />
 
                     <TextTitle text="Município" />
-                    <TextDescription text={cnpj.municipio} />
+                    <TextDescription text={cnpj?.municipio} />
 
                     <TextTitle text="CEP" />
-                    <TextDescription text={cnpj.cep} />
+                    <TextDescription text={cnpj?.cep} />
 
                     <TextTitle text="Telefone" />
-                    <TextDescription text={`${cnpj.ddd_telefone_1} / ${cnpj.ddd_telefone_2}`} />
+                    <TextDescription text={`${cnpj?.ddd_telefone_1} - ${cnpj?.ddd_telefone_2}`} />
 
                     <TextTitle text="Data da Consulta" />
                     <TextDescription text={getDate()} />
@@ -62,9 +86,9 @@ export function Result ({route}: any) {
                 </View>
                 <View style={styles.viewDescriptionCard}>
                     <TextTitle text="CNAE" />
-                    <TextDescription text={cnpj.cnae_fiscal} />
+                    <TextDescription text={cnpj?.cnae_fiscal} />
                     <TextTitle text="Atividade" />
-                    <TextDescription text={cnpj.cnae_fiscal_descricao} />
+                    <TextDescription text={cnpj?.cnae_fiscal_descricao} />
                 </View>
             </View>
 
@@ -79,9 +103,9 @@ export function Result ({route}: any) {
                         return (
                             <View key={index} style={styles.viewDescriptionCard}>
                                 <TextTitle text="CNAE" />
-                                <TextDescription text={cnae.codigo} />
+                                <TextDescription text={cnae?.codigo} />
                                 <TextTitle text="Atividade" />
-                                <TextDescription text={cnae.descricao} />
+                                <TextDescription text={cnae?.descricao} />
                             </View>
                         )
                     })
@@ -99,9 +123,9 @@ export function Result ({route}: any) {
                         return (
                             <View key={index} style={styles.viewDescriptionCard}>
                                 <TextTitle text="Nome" />
-                                <TextDescription text={qsa.nome_socio} />
+                                <TextDescription text={qsa?.nome_socio} />
                                 <TextTitle text="Qualificação" />
-                                <TextDescription text={qsa.codigo_qualificacao_socio} />
+                                <TextDescription text={qsa?.codigo_qualificacao_socio} />
                             </View>
                         )
                     })

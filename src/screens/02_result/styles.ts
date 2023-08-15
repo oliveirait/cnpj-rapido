@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     },
 
     viewDescriptionCard: {
-        flex: 0.8,
+        flex: 1,
         width: '100%',
         backgroundColor: '#f1f1f1',
         borderRadius: 10,
