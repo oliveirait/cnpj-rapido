@@ -1,12 +1,13 @@
 import { View, Text, StyleSheet, FlatList, ListRenderItemInfo } from "react-native"
 import { CNPJ } from "../../@types/cnpj/index2"
 import { getDate } from "../../utils/dateFormat"
+import { StatusBar } from "../../components/statusBar"
 
 export function Historic () {
 
     return (
         <View style={styles.container}> 
-            
+            <StatusBar />
 
             <FlatList 
                 showsVerticalScrollIndicator={false}

@@ -11,6 +11,7 @@ import { checkNetwork } from "../../utils/network";
 import { simpleAlert } from "../../utils/alerts/simple";
 
 import { useNavigation } from '@react-navigation/native'
+import { StatusBar } from "../../components/statusBar";
 
 
 export function Home () {
@@ -68,6 +69,7 @@ export function Home () {
     
     return (
         <View style={styles.container}> 
+            <StatusBar />
             <Text style={styles.title}>Insira o CNPJ</Text>
 
             <TextInput 

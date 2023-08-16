@@ -4,6 +4,7 @@ import { TextHeader, TextTitle, TextDescription } from "../../components/text";
 import { styles } from "./styles";
 import { formatDate, getDate } from "../../utils/dateFormat";
 import { useState } from "react";
+import { StatusBar } from "../../components/statusBar";
 
 
 export function Result ({route}: any) {
@@ -28,6 +29,7 @@ export function Result ({route}: any) {
 
     return (
         <View style={styles.container} onLayout={situacao}>
+        <StatusBar />
         <ScrollView style={styles.cnjp_datails}>
 
             <View style={styles.card}>
