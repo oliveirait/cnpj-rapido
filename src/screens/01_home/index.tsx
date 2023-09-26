@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { View, Text, TextInput, GestureResponderEvent } from "react-native"
+import { View, Text, TextInput, GestureResponderEvent, ActivityIndicator } from "react-native"
 import { AntDesign } from '@expo/vector-icons';
 
 import { styles } from "./styles";
@@ -32,7 +32,6 @@ export function Home () {
     const { navigate } = useNavigation()
 
 
-
     function goNext (data: CnpjProps | GestureResponderEvent ) {
         navigate('result', {
             data: data
@@ -44,7 +43,7 @@ export function Home () {
         if (!internet) {
             return simpleAlert({
                 title: 'Sem internet', 
-                description: 'Verifique sua conexão'
+                description: 'Verifique sua conexão de rede'
             })
         }
         setLoading(true)
@@ -78,30 +77,26 @@ export function Home () {
         setCnpj(input.trim().replace(cnpj_regex, "$1.$2.$3/$4-$5"))
     }
 
-    function loadAds () {
-        appOpenAd.load()
-        setTimeout(() => {
-            if (!appOpenAd.loaded) {
-                console.log('carregando aaaaaaaaaaaaaaaaaaaaaaaaa')
-                loadAds()
-            }
-        }, 1000)
-        
-    }
 
     useFocusEffect(
         useCallback(() => {
+            console.log('buscando anuncio')
+            appOpenAd.load()
             setTimeout(() => {
+                
                 if (appOpenAd.loaded) {
-                    console.log('carregouuuuuuuuuuuuuuuuuuuuuuuuu')
                     appOpenAd.show()
+                }
+                else if (!appOpenAd.loaded) {
+                    console.log('nao carregou, tentando novamente')
+                    appOpenAd.load()
                 }
             }, 2000)
         }, [appOpenAd.load])
     )
     
     return (
-        <View style={styles.container} onLayout={loadAds}> 
+        <View style={styles.container}> 
             <Status />
             <View style={styles.viewInput}>
                 <Text style={styles.title}>Insira o CNPJ</Text>
@@ -121,7 +116,7 @@ export function Home () {
                     onPress={() => getCnpjData(cnpj)} 
                     disabled={cnpj.length !== length_cnpj ? true : false}
                 >
-                    <ComponentButton.ButtonIcon icon={ loading ? <Loading size={24} color="#fff"/> : <AntDesign name="search1" size={18} color="white" /> } />
+                    <ComponentButton.ButtonIcon icon={ loading ? <ActivityIndicator size={24} color="#fff"/> : <AntDesign name="search1" size={18} color="white" /> } />
                     <ComponentButton.ButtonText text={ loading ? 'Buscando...' : 'Buscar' } style={styles.textButton}/>
                 </ComponentButton.ButtonWrapper>
             </View>

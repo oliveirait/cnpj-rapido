@@ -8,10 +8,9 @@ const App = () => {
     const [fontsLoad] = useFonts(fonts)
 
     return (
-        fontsLoad ? <Routes /> : <Loading size={14} color="#fff"/>
+        fontsLoad ? <Routes /> : <Loading size={14} color="#000" justify="flex-start"/>
     )
 }
 
 
-
-export default App
+export default App 

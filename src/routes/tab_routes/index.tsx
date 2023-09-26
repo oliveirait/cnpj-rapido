@@ -1,9 +1,7 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { Home } from '../../screens/01_home';
-import { Historic } from '../../screens/03_historic';
-import { Button } from 'react-native';
-import { HomeIcon } from '../../components/icons/Home';
+import { HomeIcon } from '../../components/icons/HomeIcon';
 
 
 const { Navigator, Screen } = createDrawerNavigator()

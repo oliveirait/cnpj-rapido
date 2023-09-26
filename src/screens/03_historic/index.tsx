@@ -4,11 +4,9 @@ import { getDate } from "../../utils/dateFormat"
 import { Status } from "../../components/statusBar"
 
 export function Historic () {
-
     return (
-        <View style={styles.container}> 
+        <View style={styles.container}>
             <Status />
-
             <FlatList 
                 showsVerticalScrollIndicator={false}
                 data={CNPJ.map((item) => item)}
@@ -21,12 +19,8 @@ export function Historic () {
                         <Text style={styles.description}>{`Status: ${item.descricao_situacao_cadastral}`}</Text>
                     </View>
                 }
-
                 style={{width: '100%'}}
-            
             />
-
-
         </View>
     )
 }
