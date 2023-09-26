@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { View, Text, TextInput, GestureResponderEvent, Dimensions } from "react-native"
+import { View, Text, TextInput, GestureResponderEvent } from "react-native"
 import { AntDesign } from '@expo/vector-icons';
 
 import { styles } from "./styles";
@@ -13,8 +13,15 @@ import { simpleAlert } from "../../utils/alerts/simple";
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { Status } from "../../components/statusBar";
 import { Banner } from "../../components/banner";
+import { AppOpenAd, TestIds } from "react-native-google-mobile-ads";
 
 
+const adUnitId = __DEV__ ? TestIds.APP_OPEN : 'ca-app-pub-2213444535919704/1325028330';
+
+const appOpenAd = AppOpenAd.createForAdRequest(adUnitId, {
+  requestNonPersonalizedAdsOnly: true,
+  keywords: ['fashion', 'clothing'],
+});
 
 
 export function Home () {
@@ -23,6 +30,7 @@ export function Home () {
     const [loading, setLoading] = useState(false)
     const cnpj_regex = /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/
     const { navigate } = useNavigation()
+
 
 
     function goNext (data: CnpjProps | GestureResponderEvent ) {
@@ -70,10 +78,30 @@ export function Home () {
         setCnpj(input.trim().replace(cnpj_regex, "$1.$2.$3/$4-$5"))
     }
 
+    function loadAds () {
+        appOpenAd.load()
+        setTimeout(() => {
+            if (!appOpenAd.loaded) {
+                console.log('carregando aaaaaaaaaaaaaaaaaaaaaaaaa')
+                loadAds()
+            }
+        }, 1000)
+        
+    }
 
+    useFocusEffect(
+        useCallback(() => {
+            setTimeout(() => {
+                if (appOpenAd.loaded) {
+                    console.log('carregouuuuuuuuuuuuuuuuuuuuuuuuu')
+                    appOpenAd.show()
+                }
+            }, 2000)
+        }, [appOpenAd.load])
+    )
     
     return (
-        <View style={styles.container}> 
+        <View style={styles.container} onLayout={loadAds}> 
             <Status />
             <View style={styles.viewInput}>
                 <Text style={styles.title}>Insira o CNPJ</Text>
