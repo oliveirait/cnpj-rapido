@@ -4,8 +4,8 @@ import { fonts } from "./src/utils/fonts";
 import { Loading } from "./src/components/loading";
 
 
-export default function App () {
-    const [fontsLoad] = useFonts(fonts) 
+const App = () => {
+    const [fontsLoad] = useFonts(fonts)
 
     return (
         fontsLoad ? <Routes /> : <Loading size={14} color="#fff"/>
@@ -13,3 +13,5 @@ export default function App () {
 }
 
 
+
+export default App

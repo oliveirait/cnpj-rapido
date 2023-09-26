@@ -4,10 +4,10 @@
     "slug": "cnpj-rapido",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/app/icon.png",
+    "icon": "./src/assets/images/assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./src/assets/app/splash.png",
+      "image": "./src/assets/images/assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,18 +19,33 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/app/adaptive-icon.png",
+        "foregroundImage": "./src/assets/images/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.oliveirafocs.cnpjrapido"
     },
     "web": {
-      "favicon": "./src/assets/app/favicon.png"
+      "favicon": "./src/assets/images/assets/favicon.png"
     },
     "extra": {
       "eas": {
         "projectId": "fdfcdf26-973a-48db-be75-22b46d714a23"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "13.0"
+          }
+        }
+      ]
+    ]
+  },
+
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-2213444535919704~1239314146",
+    "ios_app_id": "ca-app-pub-2213444535919704~1239314146"
   }
 }

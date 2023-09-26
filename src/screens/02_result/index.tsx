@@ -4,32 +4,32 @@ import { TextHeader, TextTitle, TextDescription } from "../../components/text";
 import { styles } from "./styles";
 import { formatDate, getDate } from "../../utils/dateFormat";
 import { useState } from "react";
-import { StatusBar } from "../../components/statusBar";
+import { Status } from "../../components/statusBar";
 
 
 export function Result ({route}: any) {
     const cnpj: CnpjProps = route.params?.data
-    const [situacao_cor, set_situacao_cor] = useState('#000')
+    const [situation_color, set_situation_color] = useState('#000')
 
     const situacao = () => {
         let descricao = cnpj?.descricao_situacao_cadastral
         if (descricao === 'ATIVA') {
-            set_situacao_cor('#008507')
+            set_situation_color('#008507')
         } else if (descricao === 'SUSPENSA') {
-            set_situacao_cor('#dbdf00')
+            set_situation_color('#dbdf00')
         } else if (descricao === 'INAPTA') {
-            set_situacao_cor('#c70700')
+            set_situation_color('#c70700')
         } else if (descricao === 'BAIXADA') {
-            set_situacao_cor('#b90057')
+            set_situation_color('#b90057')
         } else {
-            set_situacao_cor('#5a5a5a')
+            set_situation_color('#5a5a5a')
         }   
     }
 
 
     return (
         <View style={styles.container} onLayout={situacao}>
-        <StatusBar />
+        <Status />
         <ScrollView style={styles.cnjp_datails}>
 
             <View style={styles.card}>
@@ -38,7 +38,7 @@ export function Result ({route}: any) {
                 </View>
                 <View style={styles.viewDescriptionCard}>
                     <TextTitle text="Situação" />
-                    <TextDescription text={cnpj?.descricao_situacao_cadastral} style={[{...styles.textTitleCard, color: situacao_cor}]}/>
+                    <TextDescription text={cnpj?.descricao_situacao_cadastral} style={[{...styles.textTitleCard, color: situation_color}]}/>
 
                     <TextTitle text="Nome" />
                     <TextDescription text={cnpj?.razao_social} />

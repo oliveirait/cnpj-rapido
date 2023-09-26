@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { View, Text, TextInput, GestureResponderEvent } from "react-native"
+import { useCallback, useState } from "react"
+import { View, Text, TextInput, GestureResponderEvent, Dimensions } from "react-native"
 import { AntDesign } from '@expo/vector-icons';
 
 import { styles } from "./styles";
@@ -10,8 +10,11 @@ import { Loading } from "../../components/loading";
 import { checkNetwork } from "../../utils/network";
 import { simpleAlert } from "../../utils/alerts/simple";
 
-import { useNavigation } from '@react-navigation/native'
-import { StatusBar } from "../../components/statusBar";
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
+import { Status } from "../../components/statusBar";
+import { Banner } from "../../components/banner";
+
+
 
 
 export function Home () {
@@ -21,13 +24,14 @@ export function Home () {
     const cnpj_regex = /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/
     const { navigate } = useNavigation()
 
+
     function goNext (data: CnpjProps | GestureResponderEvent ) {
         navigate('result', {
             data: data
         })
-    } 
+    }
     
-    async function getCnpjData (cnpj: string) {
+    async function getCnpjData (cnpj: string) { 
         const internet = await checkNetwork()
         if (!internet) {
             return simpleAlert({
@@ -45,7 +49,7 @@ export function Home () {
                 .catch(() => {
                     simpleAlert({
                         title: 'CNPJ inválido', 
-                        description: 'Verifique a numeracao e tente novamente!'
+                        description: 'Verifique se está correto e tente novamente!'
                     })
                 })
                 .finally(() => 
@@ -62,34 +66,41 @@ export function Home () {
         }
     } 
 
-
-    function inputText (input: string) {
+    function inputText (input: string) { 
         setCnpj(input.trim().replace(cnpj_regex, "$1.$2.$3/$4-$5"))
     }
+
+
     
     return (
         <View style={styles.container}> 
-            <StatusBar />
-            <Text style={styles.title}>Insira o CNPJ</Text>
+            <Status />
+            <View style={styles.viewInput}>
+                <Text style={styles.title}>Insira o CNPJ</Text>
 
-            <TextInput 
-                placeholder="Digite o numero do CNPJ"
-                value={cnpj}
-                cursorColor={'#000'}
-                onChangeText={inputText}
-                maxLength={length_cnpj}
-                keyboardType="numeric"
-                style={styles.input}
-            />
+                <TextInput 
+                    placeholder="Digite ou cole o número do CNPJ"
+                    value={cnpj}
+                    cursorColor={'#000'}
+                    onChangeText={inputText}
+                    maxLength={length_cnpj}
+                    keyboardType="numeric"
+                    style={styles.input}
+                />
 
-            <ComponentButton.ButtonWrapper 
-                style={[{...styles.button, backgroundColor: cnpj.length !== length_cnpj ? '#c2c2c2' : '#000'}]}
-                onPress={() => getCnpjData(cnpj)} 
-                disabled={cnpj.length !== length_cnpj ? true : false}
-            >
-                <ComponentButton.ButtonIcon icon={ loading ? <Loading size={24} color="#fff"/> : <AntDesign name="search1" size={18} color="white" /> } />
-                <ComponentButton.ButtonText text={ loading ? 'Buscando...' : 'Buscar' } style={styles.textButton}/>
-            </ComponentButton.ButtonWrapper>
+                <ComponentButton.ButtonWrapper 
+                    style={[{...styles.button, backgroundColor: cnpj.length !== length_cnpj ? '#c2c2c2' : '#000'}]}
+                    onPress={() => getCnpjData(cnpj)} 
+                    disabled={cnpj.length !== length_cnpj ? true : false}
+                >
+                    <ComponentButton.ButtonIcon icon={ loading ? <Loading size={24} color="#fff"/> : <AntDesign name="search1" size={18} color="white" /> } />
+                    <ComponentButton.ButtonText text={ loading ? 'Buscando...' : 'Buscar' } style={styles.textButton}/>
+                </ComponentButton.ButtonWrapper>
+            </View>
+
+            <View style={styles.viewBanner}>
+                <Banner />   
+            </View>
 
         </View>
     )

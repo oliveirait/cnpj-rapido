@@ -3,17 +3,22 @@ import { Dimensions, StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     container: {
-        width: Dimensions.get('screen').width,
-        height: Dimensions.get('screen').height,
-        alignItems: 'center', justifyContent: 'flex-start',
-        gap: 10, marginTop: 30
+        width: '100%',
+        height: '100%',
+        justifyContent: 'space-between', alignItems: 'center',
     },
 
     title: {
-        fontFamily: 'Bold', fontSize: 36, 
+        fontFamily: 'Bold', fontSize: 32, 
         alignSelf: 'flex-start', paddingHorizontal: 20,
         paddingBottom: 10
         
+    },
+
+    viewInput: {
+        flex: 1, width: '100%',
+        alignItems: 'center', justifyContent: 'flex-start',
+        gap: 10, paddingVertical: 20
     },
 
     input: {
@@ -51,5 +56,11 @@ export const styles = StyleSheet.create({
         gap: 10,
         elevation: 20, shadowColor: '#000',
         
+    },
+
+    viewBanner: {
+        margin: 10, alignSelf: 'center', justifyContent: 'center', alignItems: 'center',
+        overflow: "scroll"
     }
+
 })

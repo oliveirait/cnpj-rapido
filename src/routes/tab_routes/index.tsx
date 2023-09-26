@@ -2,6 +2,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { Home } from '../../screens/01_home';
 import { Historic } from '../../screens/03_historic';
+import { Button } from 'react-native';
+import { HomeIcon } from '../../components/icons/Home';
 
 
 const { Navigator, Screen } = createDrawerNavigator()
@@ -27,6 +29,7 @@ const screen = {
 }
 
 
+
 const TabRoutes = () => {
     return (
         <Navigator
@@ -42,19 +45,10 @@ const TabRoutes = () => {
                 component={Home} 
                 options={{
                     headerTitle: screen.home.headerName, 
-                    title: screen.home.tabName
+                    title: screen.home.tabName,
+                    drawerIcon: HomeIcon                    
                 }}
             />
-
-            <Screen 
-                name={screen.historic.pageName} 
-                component={Historic} 
-                options={{
-                    headerTitle: screen.historic.headerName, 
-                    title: screen.historic.tabName
-                }}
-            />
-
         </Navigator>
     )
 }

@@ -2,24 +2,18 @@ import { Alert, Linking } from "react-native"
 import VersionCheck from 'expo-version-checker';
 
 
-async function openURL (URL: string) {
-    const isLink = await Linking.canOpenURL(URL)
-    isLink ?? Linking.openURL(URL)
-  }
-
-
 export async function checkVersion () {
     const update = await VersionCheck.needUpdate()
 
     try {
         if (update?.isNeeded) {
-            console.log(update?.isNeeded)
+            
             Alert.alert(
                 'Nova versão disponível!',
-                'Uma nova atualização está disponível, deseja atualizar agora?',
+                'Atualize seu aplicativo para correção de falhas ou novas funcionalidades.',
                 [
                     {text: 'Não', style: 'cancel'},
-                    {text: 'Atualizar agora', onPress: () => openURL(update.storeUrl) }
+                    {text: 'Atualizar agora', onPress: () => Linking.canOpenURL(update.storeUrl)}
                 ],
     
                 {cancelable: false}
