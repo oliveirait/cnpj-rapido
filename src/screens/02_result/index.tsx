@@ -1,12 +1,13 @@
-import { View, ScrollView, LayoutChangeEvent } from "react-native";
+import { View, ScrollView, LayoutChangeEvent, LayoutRectangle } from "react-native";
 import { CnpjProps } from "../../@types/cnpj";
 import { TextHeader, TextTitle, TextDescription } from "../../components/text";
 import { styles } from "./styles";
 import { formatDate, getDate } from "../../utils/dateFormat";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Status } from "../../components/statusBar";
 import { Loading } from "../../components/loading";
 import theme from "../../utils/theme/theme"
+import { cnpjStatus } from "../../utils/cnpj/CnpjStatus";
 
 
 export function Result ({route}: any) {
@@ -14,23 +15,34 @@ export function Result ({route}: any) {
     const [situation_color, set_situation_color] = useState(theme.colors.black)
     const [loaded, setLoaded] = useState(false)
 
-    const situacao = () => {
-        let description = cnpj?.descricao_situacao_cadastral
-        if (description === 'ATIVA') {
+    function layoutloaded (layout: LayoutRectangle) {
+        if (layout.height && layout.width) {
+            console.log('layout loaded!')
+            setLoaded(true)
+        }
+    }
+
+    const situacao = (event: LayoutChangeEvent) => {
+        let description_status = cnpj?.descricao_situacao_cadastral
+
+        if (description_status === 'ATIVA') {
             set_situation_color(theme.description.active)
-        } else if (description === 'SUSPENSA') {
+        } 
+        else if (description_status === cnpjStatus.active) {
             set_situation_color(theme.description.suspend)
-        } else if (description === 'INAPTA') {
+        } 
+        else if (description_status === cnpjStatus.unfit) {
             set_situation_color(theme.description.inactive)
-        } else if (description === 'BAIXADA') {
+        } 
+        else if (description_status === cnpjStatus.low) {
             set_situation_color(theme.description.low)
-        } else {
+        } 
+        else {
             set_situation_color(theme.description.none)
         }
 
-        setTimeout(() => {
-            setLoaded(true)
-        }, 1000)
+        const { layout } = event.nativeEvent
+        return layoutloaded(layout)
     }
 
 
