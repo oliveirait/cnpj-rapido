@@ -1,4 +1,5 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import theme from "../../utils/theme/theme";
 
 
 export const styles = StyleSheet.create({
@@ -23,9 +24,9 @@ export const styles = StyleSheet.create({
 
     input: {
         width: '90%', height: 50,
-        borderWidth: 1, borderColor: '#000', borderRadius: 10,
+        borderWidth: 1, borderColor: theme.colors.black, borderRadius: 10,
         paddingHorizontal: 10, paddingVertical: 4,
-        backgroundColor: '#fff',
+        backgroundColor: theme.colors.white,
         fontFamily: 'Bold'
     },
 
@@ -37,12 +38,12 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 10, paddingVertical: 4,
         alignItems: 'center', justifyContent: 'center',
         gap: 5,
-        backgroundColor: '#000',
+        backgroundColor: theme.colors.black,
     },
 
     textButton: {
         textAlign: 'center',
-        color: '#fff',
+        color: theme.colors.white,
         fontFamily: 'Bold'
     },
 
@@ -51,10 +52,10 @@ export const styles = StyleSheet.create({
         width: '90%',
         margin: 10,
         borderRadius: 20,
-        backgroundColor: '#fff',
+        backgroundColor: theme.colors.white,
         padding: 20,
         gap: 10,
-        elevation: 20, shadowColor: '#000',
+        elevation: 20, shadowColor: theme.colors.black,
         
     },
 

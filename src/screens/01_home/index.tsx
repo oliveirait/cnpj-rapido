@@ -6,7 +6,6 @@ import { styles } from "./styles";
 import { ComponentButton } from "../../components/button";
 import { CnpjProps } from "../../@types/cnpj"
 import { CNPJ } from "../../services/api";
-import { Loading } from "../../components/loading";
 import { checkNetwork } from "../../utils/network";
 import { simpleAlert } from "../../utils/alerts/simple";
 
@@ -14,6 +13,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { Status } from "../../components/statusBar";
 import { Banner } from "../../components/banner";
 import { AppOpenAd, TestIds } from "react-native-google-mobile-ads";
+import theme from "../../utils/theme/theme";
 
 
 const adUnitId = __DEV__ ? TestIds.APP_OPEN : 'ca-app-pub-2213444535919704/1325028330';
@@ -22,6 +22,7 @@ const appOpenAd = AppOpenAd.createForAdRequest(adUnitId, {
   requestNonPersonalizedAdsOnly: true,
   keywords: ['fashion', 'clothing'],
 });
+
 
 
 export function Home () {
@@ -104,7 +105,7 @@ export function Home () {
                 <TextInput 
                     placeholder="Digite ou cole o número do CNPJ"
                     value={cnpj}
-                    cursorColor={'#000'}
+                    cursorColor={theme.colors.black}
                     onChangeText={inputText}
                     maxLength={length_cnpj}
                     keyboardType="numeric"
@@ -112,11 +113,11 @@ export function Home () {
                 />
 
                 <ComponentButton.ButtonWrapper 
-                    style={[{...styles.button, backgroundColor: cnpj.length !== length_cnpj ? '#c2c2c2' : '#000'}]}
+                    style={[{...styles.button, backgroundColor: cnpj.length !== length_cnpj ? theme.colors.disable : theme.colors.blue}]}
                     onPress={() => getCnpjData(cnpj)} 
                     disabled={cnpj.length !== length_cnpj ? true : false}
                 >
-                    <ComponentButton.ButtonIcon icon={ loading ? <ActivityIndicator size={24} color="#fff"/> : <AntDesign name="search1" size={18} color="white" /> } />
+                    <ComponentButton.ButtonIcon icon={ loading ? <ActivityIndicator size={24} color={theme.colors.white}/> : <AntDesign name="search1" size={18} color={theme.colors.white} /> } />
                     <ComponentButton.ButtonText text={ loading ? 'Buscando...' : 'Buscar' } style={styles.textButton}/>
                 </ComponentButton.ButtonWrapper>
             </View>

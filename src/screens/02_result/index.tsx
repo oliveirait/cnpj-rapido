@@ -6,28 +6,27 @@ import { formatDate, getDate } from "../../utils/dateFormat";
 import { useEffect, useState } from "react";
 import { Status } from "../../components/statusBar";
 import { Loading } from "../../components/loading";
+import theme from "../../utils/theme/theme"
 
 
 export function Result ({route}: any) {
     const cnpj: CnpjProps = route.params?.data
-    const [situation_color, set_situation_color] = useState('#000')
+    const [situation_color, set_situation_color] = useState(theme.colors.black)
     const [loaded, setLoaded] = useState(false)
 
-    const situacao = (layoutEvent: LayoutChangeEvent) => {
-        
-        let descricao = cnpj?.descricao_situacao_cadastral
-        if (descricao === 'ATIVA') {
-            set_situation_color('#008507')
-        } else if (descricao === 'SUSPENSA') {
-            set_situation_color('#dbdf00')
-        } else if (descricao === 'INAPTA') {
-            set_situation_color('#c70700')
-        } else if (descricao === 'BAIXADA') {
-            set_situation_color('#b90057')
+    const situacao = () => {
+        let description = cnpj?.descricao_situacao_cadastral
+        if (description === 'ATIVA') {
+            set_situation_color(theme.description.active)
+        } else if (description === 'SUSPENSA') {
+            set_situation_color(theme.description.suspend)
+        } else if (description === 'INAPTA') {
+            set_situation_color(theme.description.inactive)
+        } else if (description === 'BAIXADA') {
+            set_situation_color(theme.description.low)
         } else {
-            set_situation_color('#5a5a5a')
+            set_situation_color(theme.description.none)
         }
-
 
         setTimeout(() => {
             setLoaded(true)
@@ -148,7 +147,7 @@ export function Result ({route}: any) {
 
         :
 
-            <Loading size={28} color="#000"/>
+            <Loading size={32} color={theme.colors.blue} justify={"flex-start"}/>
         }
         
 

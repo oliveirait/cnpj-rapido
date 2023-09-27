@@ -1,23 +1,24 @@
 import { StyleSheet } from "react-native"
+import theme from "../../utils/theme/theme"
 
 
 export const styles = StyleSheet.create({
     container: {
         flex: 1, 
         alignItems: 'center', justifyContent: 'space-between', 
-        backgroundColor: '#fff'
+        backgroundColor: theme.colors.white
     },
     
     cnjp_datails: {
         flex: 1,
         width: '100%',
-        backgroundColor: '#fff',
+        backgroundColor: theme.colors.white,
         paddingHorizontal: 20
     },
 
     card: {
         width: '100%', height: 'auto', 
-        backgroundColor: '#fff', 
+        backgroundColor: theme.colors.white, 
         borderRadius: 20, 
         padding: 10,
         marginVertical: 0,
@@ -26,10 +27,10 @@ export const styles = StyleSheet.create({
     viewTitleCard: {
         height: 50,
         width: '100%',
-        backgroundColor: '#000',
+        backgroundColor: theme.colors.blue,
         borderRadius: 10,
         alignItems: 'center', justifyContent: 'center',
-        elevation: 10, shadowColor: '#000'
+        elevation: 10, shadowColor: theme.colors.black
 
     },
 
@@ -42,12 +43,12 @@ export const styles = StyleSheet.create({
         marginVertical: 10,
         gap: 5,
         padding: 10,
-        elevation: 10, shadowColor: '#000'
+        elevation: 10, shadowColor: theme.colors.black
     },
 
     textTitleHeader: {
         textAlign: 'center',
-        color: '#fff',
+        color: theme.colors.white,
         fontFamily: 'Bold',
         fontSize: 18
     },
