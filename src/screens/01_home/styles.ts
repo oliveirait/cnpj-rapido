@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     },
 
     viewInput: {
-        flex: 1, width: '100%',
+        width: '100%',
         alignItems: 'center', justifyContent: 'flex-start',
         gap: 10, paddingVertical: 20
     },
