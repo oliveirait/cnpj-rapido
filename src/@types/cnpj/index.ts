@@ -1,3 +1,5 @@
+import { GestureResponderEvent } from "react-native"
+
 interface CNAE {
     codigo: number
     descricao: string
@@ -15,7 +17,7 @@ interface QSA {
   codigo_qualificacao_representante_legal: number | null
 }
   
-export interface CnpjProps {
+export interface CnpjProps extends GestureResponderEvent {
   cnpj: string
   identificador_matriz_filial: number
   descricao_matriz_filial: string

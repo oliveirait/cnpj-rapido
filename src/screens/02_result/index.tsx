@@ -1,13 +1,16 @@
 import { View, ScrollView, LayoutChangeEvent, LayoutRectangle } from "react-native";
+import { AntDesign } from '@expo/vector-icons';
 import { CnpjProps } from "../../@types/cnpj";
 import { TextHeader, TextTitle, TextDescription } from "../../components/text";
 import { styles } from "./styles";
 import { formatDate, getDate } from "../../utils/dateFormat";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Status } from "../../components/statusBar";
 import { Loading } from "../../components/loading";
 import theme from "../../utils/theme/theme"
 import { cnpjStatus } from "../../utils/cnpj/cnpjStatus";
+import { ComponentButton } from "../../components/button";
+import { shareAction } from "../../utils/cnpj/sharedAction";
 
 
 export function Result ({route}: any) {
@@ -162,6 +165,14 @@ export function Result ({route}: any) {
                         })
                     }
                 </View>
+
+                <ComponentButton.ButtonWrapper 
+                    style={[{...styles.button, backgroundColor: (theme.colors.blue)}]}
+                    onPress={() => shareAction(route.params?.data)}
+                >
+                    <ComponentButton.ButtonIcon icon={ <AntDesign name="search1" size={18} color={theme.colors.white} /> }/>
+                    <ComponentButton.ButtonText text={ 'Compartilhar '} style={styles.textButton}/>
+                </ComponentButton.ButtonWrapper>
 
             </ScrollView>
 

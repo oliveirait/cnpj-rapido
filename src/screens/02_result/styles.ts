@@ -62,5 +62,24 @@ export const styles = StyleSheet.create({
         textAlign: 'center'
     },
 
+    button: 
+    {
+        flexDirection: 'row',
+        width: '90%', height: 50,
+        borderRadius: 10,
+        paddingHorizontal: 10, paddingVertical: 4,
+        alignItems: 'center', justifyContent: 'center',
+        gap: 5,
+        backgroundColor: theme.colors.black,
+    },
+
+    textButton: 
+    {
+        textAlign: 'center',
+        color: theme.colors.white,
+        fontFamily: 'Bold'
+    },
+
+
 
 })

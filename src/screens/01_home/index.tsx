@@ -1,19 +1,19 @@
 import { useCallback, useState } from "react"
-import { View, Text, TextInput, GestureResponderEvent, ActivityIndicator } from "react-native"
+import { View, Text, TextInput, ActivityIndicator } from "react-native"
 import { AntDesign } from '@expo/vector-icons';
+import { AppOpenAd, TestIds } from "react-native-google-mobile-ads";
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 import { styles } from "./styles";
 import { ComponentButton } from "../../components/button";
 import { CnpjProps } from "../../@types/cnpj"
-import { CNPJ } from "../../services/api";
+import { get_CNPJ } from "../../services/api";
 import { checkNetwork } from "../../utils/network";
 import { simpleAlert } from "../../utils/alerts/simple";
-
-import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { Status } from "../../components/statusBar";
 import { Banner } from "../../components/banner";
-import { AppOpenAd, TestIds } from "react-native-google-mobile-ads";
 import theme from "../../utils/theme/theme";
+import { shareAction } from "../../utils/cnpj/sharedAction";
 
 
 const adUnitId = __DEV__ ? TestIds.APP_OPEN : 'ca-app-pub-2213444535919704/1325028330';
@@ -31,16 +31,18 @@ export function Home () {
     const cnpj_regex = /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/
     const { navigate } = useNavigation()
 
-
-    function goNext (data: CnpjProps | GestureResponderEvent ) 
+    
+    function goNext (data: CnpjProps) 
     {
         navigate('result', {data: data})
     }
+
     
     async function getCnpjData (cnpj: string) 
     { 
+        setLoading(true)
         const internet = await checkNetwork()
-        if (!internet) 
+        if (!internet)
         {
             return simpleAlert(
                 {
@@ -49,16 +51,17 @@ export function Home () {
                 }
             )
         }
-        setLoading(true)
+        
         const cnpj_replaced = cnpj.replace(/[/.-]/g, '')
         if (cnpj_replaced.length === 14)
         {
-          CNPJ.get(cnpj_replaced)
+          get_CNPJ.get(cnpj_replaced)
             .then((data) => 
                 goNext(data.data)
             )
-            .catch(() => 
+            .catch((e) => 
             {
+              console.log(JSON.stringify(e))
               simpleAlert(
               {
                   title: 'CNPJ inválido', 
@@ -80,6 +83,7 @@ export function Home () {
           setLoading(false)
         }
     } 
+
 
     function inputText (input: string) 
     { 
@@ -106,9 +110,10 @@ export function Home () {
         }, 2000)
       }, [appOpenAd.load])
     )
+
     
     return (
-        <View style={styles.container}> 
+        <View style={styles.container}>
             <Status />
             <View style={styles.viewInput}>
                 <Text style={styles.title}>Insira o CNPJ</Text>
