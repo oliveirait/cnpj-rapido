@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Status } from "../../components/statusBar";
 import { Loading } from "../../components/loading";
 import theme from "../../utils/theme/theme"
-import { cnpjStatus } from "../../utils/cnpj/CnpjStatus";
+import { cnpjStatus } from "../../utils/cnpj/cnpjStatus";
 
 
 export function Result ({route}: any) {
@@ -15,29 +15,37 @@ export function Result ({route}: any) {
     const [situation_color, set_situation_color] = useState(theme.colors.black)
     const [loaded, setLoaded] = useState(false)
 
-    function layoutloaded (layout: LayoutRectangle) {
-        if (layout.height && layout.width) {
+    function layoutloaded (layout: LayoutRectangle) 
+    {
+        if (layout.height && layout.width) 
+        {
             console.log('layout loaded!')
             setLoaded(true)
         }
     }
 
-    const situacao = (event: LayoutChangeEvent) => {
+    const situacao = (event: LayoutChangeEvent) => 
+    {
         let description_status = cnpj?.descricao_situacao_cadastral
 
-        if (description_status === 'ATIVA') {
+        if (description_status === 'ATIVA') 
+        {
             set_situation_color(theme.description.active)
         } 
-        else if (description_status === cnpjStatus.active) {
+        else if (description_status === cnpjStatus.active) 
+        {
             set_situation_color(theme.description.suspend)
         } 
-        else if (description_status === cnpjStatus.unfit) {
+        else if (description_status === cnpjStatus.unfit) 
+        {
             set_situation_color(theme.description.inactive)
         } 
-        else if (description_status === cnpjStatus.low) {
+        else if (description_status === cnpjStatus.low) 
+        {
             set_situation_color(theme.description.low)
         } 
-        else {
+        else 
+        {
             set_situation_color(theme.description.none)
         }
 

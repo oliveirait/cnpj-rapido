@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, ListRenderItemInfo } from "react-native"
+import { View, Text, StyleSheet, FlatList } from "react-native"
 import { CNPJ } from "../../@types/cnpj/index2"
 import { getDate } from "../../utils/dateFormat"
 import { Status } from "../../components/statusBar"
@@ -27,7 +27,8 @@ export function Historic () {
 
 
 const styles = StyleSheet.create({
-    container: {
+    container: 
+    {
         flex: 1, 
         width: '100%',
         alignItems: 'center', justifyContent: 'center', 
@@ -36,15 +37,18 @@ const styles = StyleSheet.create({
         
     },
 
-    title: {
+    title: 
+    {
         fontFamily: 'Bold'
     },
 
-    description: {
+    description: 
+    {
         fontFamily: 'Regular'
     },
 
-    view: {
+    view: 
+    {
         flex: 1,
         backgroundColor: '#fff',
         borderRadius: 15,

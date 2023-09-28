@@ -10,9 +10,11 @@ export function Banner () {
         <BannerAd
           unitId={PUB_ID_BANNER}
           size={BannerAdSize.MEDIUM_RECTANGLE}
-          requestOptions={{
-            requestNonPersonalizedAdsOnly: true,
-          }}
+          requestOptions={
+            {
+              requestNonPersonalizedAdsOnly: true,
+            }
+          }
         />
 
   )
