@@ -15,6 +15,16 @@ export function getDate () {
 
 export function formatDate (dt: string) {
     let date = new Date(dt)
-    let dateFormated = Intl.DateTimeFormat('pt-BR', {timeZone: 'UTC'}).format(date)
+    let dateFormated = date 
+        ? Intl.DateTimeFormat('pt-BR', {timeZone: 'UTC'}).format(date)
+        : ''
     return dateFormated
+}
+
+export function formatCapital (capital: number) 
+{
+    let response = capital 
+        ? new Intl.NumberFormat('pt-BR', {currency: 'BRL', style: 'currency'}).format(capital)
+        : ''
+    return response
 }

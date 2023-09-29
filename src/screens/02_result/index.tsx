@@ -2,7 +2,7 @@ import { View, ScrollView, LayoutChangeEvent } from "react-native";
 import { CnpjProps } from "../../@types/cnpj";
 import { TextHeader, TextTitle, TextDescription } from "../../components/text";
 import { styles } from "./styles";
-import { formatDate, getDate } from "../../utils/dateFormat";
+import { formatCapital, formatDate, getDate } from "../../utils/date_currency_format";
 import React, { useState } from "react";
 import { Status } from "../../components/statusBar";
 import { Loading } from "../../components/loading";
@@ -19,7 +19,7 @@ export function Result ({route}: any) {
     const [loaded, setLoaded] = useState(false)
     const dataHora = getDate()
 
-
+    
     const situation = (event: LayoutChangeEvent) => 
     {
         let description_status = cnpj?.descricao_situacao_cadastral
@@ -71,7 +71,7 @@ export function Result ({route}: any) {
                         <TextDescription text={cnpj?.porte} />
 
                         <TextTitle text="Capital Social" />
-                        <TextDescription text={`R$ ${cnpj?.capital_social},00`} />
+                        <TextDescription text={formatCapital(cnpj?.capital_social)} />
 
                         <TextTitle text="Data de Abertura" />
                         <TextDescription text={formatDate(cnpj.data_inicio_atividade)} />
@@ -95,7 +95,7 @@ export function Result ({route}: any) {
                         <TextDescription text={cnpj?.cep} />
 
                         <TextTitle text="Telefone" />
-                        <TextDescription text={`${cnpj?.ddd_telefone_1} - ${cnpj?.ddd_telefone_2}`} />
+                        <TextDescription text={`${cnpj?.ddd_telefone_1}${cnpj?.ddd_telefone_2 && ' - '.concat(cnpj.ddd_telefone_2)}`} />
 
                         <TextTitle text="Data da Consulta" />
                         <TextDescription text={dataHora} />

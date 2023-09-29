@@ -1,5 +1,5 @@
-import { useCallback, useLayoutEffect, useState } from "react"
-import { View, Text, TextInput, ActivityIndicator, LayoutRectangle, LayoutChangeEvent } from "react-native"
+import { useCallback, useEffect, useState } from "react"
+import { View, Text, TextInput, ActivityIndicator, LayoutChangeEvent } from "react-native"
 import { AntDesign } from '@expo/vector-icons';
 import { AppOpenAd, TestIds } from "react-native-google-mobile-ads";
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
@@ -13,7 +13,6 @@ import { simpleAlert } from "../../utils/alerts/simple";
 import { Status } from "../../components/statusBar";
 import { Banner } from "../../components/banner";
 import theme from "../../utils/theme/theme";
-import { shareAction } from "../../utils/cnpj/sharedAction";
 import { Loading } from "../../components/loading";
 
 
@@ -30,7 +29,7 @@ export function Home () {
     const length_cnpj = 18
     const [cnpj, setCnpj] = useState('')
     const [loading, setLoading] = useState(false)
-    const cnpj_regex = /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/
+    const cnpj_regex = /^(\d{2})(\d{3})(\d{3})(\d{4})/
     const { navigate } = useNavigation()
 
     function layoutloaded (eventLoaded: LayoutChangeEvent) 
@@ -96,8 +95,9 @@ export function Home () {
 
 
     function inputText (input: string) 
-    { 
-      setCnpj(input.trim().replace(cnpj_regex, "$1.$2.$3/$4-$5"))
+    {
+        const char = input.trim()
+        setCnpj(char.replace(cnpj_regex, "$1.$2.$3/$4-"))       
     }
 
 

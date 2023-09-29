@@ -1,6 +1,6 @@
 import { Share } from "react-native";
 import { CnpjProps } from "../../@types/cnpj";
-import { formatDate } from "../dateFormat";
+import { formatCapital, formatDate } from "../date_currency_format";
 
 
 export async function shareAction (data: CnpjProps, dataHora: string) 
@@ -10,7 +10,7 @@ Empresa: ${data?.razao_social}
 CNPJ: ${data?.cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5")}
 Situação: ${data?.descricao_situacao_cadastral}
 Porte: ${data?.porte} 
-Capital Social: ${`R$ ${data?.capital_social},00`}
+Capital Social: ${formatCapital(data?.capital_social)}
 Data de Abertura: ${formatDate(data?.data_inicio_atividade)}
 Tipo: ${data?.descricao_identificador_matriz_filial}
 Natureza Jurídica: ${data?.natureza_juridica}

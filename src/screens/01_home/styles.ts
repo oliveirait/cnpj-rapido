@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     },
 
     title: {
-        fontFamily: 'Bold', fontSize: 32, 
+        fontFamily: 'Bold', fontSize: 28, 
         alignSelf: 'flex-start', paddingHorizontal: 20,
         paddingBottom: 10
         

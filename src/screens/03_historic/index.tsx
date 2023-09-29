@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, FlatList } from "react-native"
 import { CNPJ } from "../../@types/cnpj/index2"
-import { getDate } from "../../utils/dateFormat"
+import { getDate } from "../../utils/date_currency_format"
 import { Status } from "../../components/statusBar"
 
 export function Historic () {
