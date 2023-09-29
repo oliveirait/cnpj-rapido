@@ -1,13 +1,14 @@
 import { Share } from "react-native";
 import { CnpjProps } from "../../@types/cnpj";
 import { formatCapital, formatDate } from "../date_currency_format";
+import { cepMask, cnpjMask, telMask } from "../masks";
 
 
 export async function shareAction (data: CnpjProps, dataHora: string) 
 {
     const cnpjData = `
 Empresa: ${data?.razao_social}
-CNPJ: ${data?.cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5")}
+CNPJ: ${data?.cnpj.replace(cnpjMask.reg, cnpjMask.string)}
 Situação: ${data?.descricao_situacao_cadastral}
 Porte: ${data?.porte} 
 Capital Social: ${formatCapital(data?.capital_social)}
@@ -17,8 +18,8 @@ Natureza Jurídica: ${data?.natureza_juridica}
 Logradouro: ${data?.logradouro}
 Bairro: ${data?.bairro}
 Município: ${data?.municipio}
-CEP: ${data?.cep}
-Telefone: ${data?.ddd_telefone_1}${data.ddd_telefone_2 ? ' - '.concat(data.ddd_telefone_2) : ''}
+CEP: ${String(data?.cep).replace(cepMask.reg, cepMask.string)}
+Telefone: ${data?.ddd_telefone_1.replace(telMask.reg, telMask.string)}
 Data da Consulta: ${dataHora}
 `
     const response = await Share.share(

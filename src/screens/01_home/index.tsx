@@ -14,6 +14,7 @@ import { Status } from "../../components/statusBar";
 import { Banner } from "../../components/banner";
 import theme from "../../utils/theme/theme";
 import { Loading } from "../../components/loading";
+import { cnpjMask } from "../../utils/masks";
 
 
 const adUnitId = __DEV__ ? TestIds.APP_OPEN : 'ca-app-pub-2213444535919704/1325028330';
@@ -97,7 +98,7 @@ export function Home () {
     function inputText (input: string) 
     {
         const char = input.trim()
-        setCnpj(char.replace(cnpj_regex, "$1.$2.$3/$4-"))       
+        setCnpj(char.replace(cnpjMask.reg, cnpjMask.string))       
     }
 
 

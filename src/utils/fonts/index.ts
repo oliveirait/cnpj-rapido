@@ -1,8 +1,8 @@
 import { useFonts } from 'expo-font';
 
 const fonts = {
-    'Regular': require('../../assets/fonts/Montserrat-Regular.ttf'),
-    'Bold': require('../../assets/fonts/Montserrat-Bold.ttf'),
+    'Regular': require('./fonts/Montserrat-Regular.ttf'),
+    'Bold': require('./fonts/Montserrat-Bold.ttf'),
 }
 
 

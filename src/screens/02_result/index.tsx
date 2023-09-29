@@ -11,6 +11,7 @@ import { cnpjStatus } from "../../utils/cnpj/cnpjStatus";
 import { ComponentButton } from "../../components/button";
 import { shareAction } from "../../utils/cnpj/sharedAction";
 import { IconShare } from "../../components/icons/Icons";
+import { cepMask, cnaeMask, cnpjMask, telMask } from "../../utils/masks";
 
 
 export function Result ({route}: any) {
@@ -18,7 +19,6 @@ export function Result ({route}: any) {
     const [situation_color, set_situation_color] = useState(theme.colors.black)
     const [loaded, setLoaded] = useState(false)
     const dataHora = getDate()
-
     
     const situation = (event: LayoutChangeEvent) => 
     {
@@ -65,7 +65,7 @@ export function Result ({route}: any) {
                         <TextDescription text={cnpj?.razao_social} />
 
                         <TextTitle text="CNPJ" />
-                        <TextDescription text={cnpj?.cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5")} />
+                        <TextDescription text={cnpj?.cnpj.replace(cnpjMask.reg, cnpjMask.string)} />
 
                         <TextTitle text="Porte" />
                         <TextDescription text={cnpj?.porte} />
@@ -92,10 +92,10 @@ export function Result ({route}: any) {
                         <TextDescription text={cnpj?.municipio} />
 
                         <TextTitle text="CEP" />
-                        <TextDescription text={cnpj?.cep} />
+                        <TextDescription text={String(cnpj?.cep).replace(cepMask.reg, cepMask.string)} />
 
                         <TextTitle text="Telefone" />
-                        <TextDescription text={`${cnpj?.ddd_telefone_1}${cnpj?.ddd_telefone_2 && ' - '.concat(cnpj.ddd_telefone_2)}`} />
+                        <TextDescription text={`${cnpj?.ddd_telefone_1.replace(telMask.reg, telMask.string)}`} />
 
                         <TextTitle text="Data da Consulta" />
                         <TextDescription text={dataHora} />
@@ -109,7 +109,7 @@ export function Result ({route}: any) {
                     </View>
                     <View style={styles.viewDescriptionCard}>
                         <TextTitle text="CNAE" />
-                        <TextDescription text={cnpj?.cnae_fiscal} />
+                        <TextDescription text={String(cnpj?.cnae_fiscal).replace(cnaeMask.reg, cnaeMask.string)} />
                         <TextTitle text="Atividade" />
                         <TextDescription text={cnpj?.cnae_fiscal_descricao} />
                     </View>
@@ -126,7 +126,7 @@ export function Result ({route}: any) {
                             return (
                                 <View key={index} style={styles.viewDescriptionCard}>
                                     <TextTitle text="CNAE" />
-                                    <TextDescription text={cnae?.codigo} />
+                                    <TextDescription text={String(cnae?.codigo).replace(cnaeMask.reg, cnaeMask.string)} />
                                     <TextTitle text="Atividade" />
                                     <TextDescription text={cnae?.descricao} />
                                 </View>
