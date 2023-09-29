@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react"
-import { View, Text, TextInput, ActivityIndicator } from "react-native"
+import { useCallback, useLayoutEffect, useState } from "react"
+import { View, Text, TextInput, ActivityIndicator, LayoutRectangle, LayoutChangeEvent } from "react-native"
 import { AntDesign } from '@expo/vector-icons';
 import { AppOpenAd, TestIds } from "react-native-google-mobile-ads";
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
@@ -14,6 +14,7 @@ import { Status } from "../../components/statusBar";
 import { Banner } from "../../components/banner";
 import theme from "../../utils/theme/theme";
 import { shareAction } from "../../utils/cnpj/sharedAction";
+import { Loading } from "../../components/loading";
 
 
 const adUnitId = __DEV__ ? TestIds.APP_OPEN : 'ca-app-pub-2213444535919704/1325028330';
@@ -25,14 +26,23 @@ const appOpenAd = AppOpenAd.createForAdRequest(adUnitId,
 
 
 export function Home () {
+    const [loaded, setLoaded] = useState(false)
     const length_cnpj = 18
     const [cnpj, setCnpj] = useState('')
     const [loading, setLoading] = useState(false)
     const cnpj_regex = /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/
     const { navigate } = useNavigation()
 
-    
-    function goNext (data: CnpjProps) 
+    function layoutloaded (eventLoaded: LayoutChangeEvent) 
+    {
+        if (eventLoaded.nativeEvent.layout) 
+        {
+            console.log('layout loaded!')
+            setLoaded(true)
+        }
+    }
+
+    function goNextPage (data: CnpjProps) 
     {
         navigate('result', {data: data})
     }
@@ -57,7 +67,7 @@ export function Home () {
         {
           get_CNPJ.get(cnpj_replaced)
             .then((data) => 
-                goNext(data.data)
+                goNextPage(data.data)
             )
             .catch((e) => 
             {
@@ -113,43 +123,53 @@ export function Home () {
 
     
     return (
-        <View style={styles.container}>
+            <>       
             <Status />
-            <View style={styles.viewInput}>
-                <Text style={styles.title}>Insira o CNPJ</Text>
+            <View onLayout={layoutloaded} style={styles.container}>
+                { loaded ?
+                <>
+                    <View style={styles.viewInput} >
+                        <Text style={styles.title}>Insira o CNPJ</Text>
 
-                <TextInput 
-                    placeholder="Digite ou cole o número do CNPJ"
-                    value={cnpj}
-                    cursorColor={theme.colors.black}
-                    onChangeText={inputText}
-                    maxLength={length_cnpj}
-                    keyboardType="numeric"
-                    style={styles.input}
-                />
+                        <TextInput 
+                            placeholder="Digite ou cole o número do CNPJ"
+                            value={cnpj}
+                            cursorColor={theme.colors.black}
+                            onChangeText={inputText}
+                            maxLength={length_cnpj}
+                            keyboardType="numeric"
+                            style={styles.input}
+                        />
 
-                <ComponentButton.ButtonWrapper 
-                    style={[{...styles.button, backgroundColor: cnpj.length !== length_cnpj ? theme.colors.disable : theme.colors.blue}]}
-                    onPress={() => getCnpjData(cnpj)} 
-                    disabled={cnpj.length !== length_cnpj ? true : false}
-                >
-                    <ComponentButton.ButtonIcon 
-                        icon={ loading 
-                            ? <ActivityIndicator size={24} color={theme.colors.white}/> 
-                            : <AntDesign name="search1" size={18} color={theme.colors.white} /> 
-                        }/>
-                    <ComponentButton.ButtonText 
-                        text={ loading ? 'Buscando...' : 'Buscar' } 
-                        style={styles.textButton}
-                    />
-                </ComponentButton.ButtonWrapper>
+                        <ComponentButton.ButtonWrapper 
+                            style={[{...styles.button, backgroundColor: cnpj.length !== length_cnpj ? theme.colors.disable : theme.colors.blue}]}
+                            onPress={() => getCnpjData(cnpj)} 
+                            disabled={cnpj.length !== length_cnpj ? true : false}
+                        >
+                            <ComponentButton.ButtonIcon 
+                                icon={ loading 
+                                    ? <ActivityIndicator size={24} color={theme.colors.white}/> 
+                                    : <AntDesign name="search1" size={18} color={theme.colors.white} /> 
+                                }/>
+                            <ComponentButton.ButtonText 
+                                text={ loading ? 'Buscando...' : 'Buscar' } 
+                                style={styles.textButton}
+                            />
+                        </ComponentButton.ButtonWrapper>
+                    </View>
+
+                    <View style={styles.viewBanner}>
+                        <Banner />   
+                    </View>
+                </>
+                : 
+
+                <Loading size={32} color={theme.colors.blue} justify={"flex-start"}/>
+                }
+
             </View>
 
-            <View style={styles.viewBanner}>
-                <Banner />   
-            </View>
-
-        </View>
+        </>
     )
 }
 

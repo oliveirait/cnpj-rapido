@@ -1,7 +1,7 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { Home } from '../../screens/01_home';
-import { HomeIcon } from '../../components/icons/HomeIcon';
+import { IconHome } from '../../components/icons/Icons';
 
 
 const { Navigator, Screen } = createDrawerNavigator()
@@ -44,7 +44,7 @@ const TabRoutes = () => {
                 options={{
                     headerTitle: screen.home.headerName, 
                     title: screen.home.tabName,
-                    drawerIcon: HomeIcon                    
+                    drawerIcon: IconHome                    
                 }}
             />
         </Navigator>

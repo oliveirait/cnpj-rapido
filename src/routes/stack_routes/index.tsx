@@ -11,7 +11,7 @@ const headerResult = 'Resultado'
 
 const StackRoutes = () => {
     return(
-        <Navigator 
+        <Navigator
             initialRouteName="main"
             screenOptions={
                 {

@@ -1,5 +1,4 @@
-import { View, ScrollView, LayoutChangeEvent, LayoutRectangle } from "react-native";
-import { AntDesign } from '@expo/vector-icons';
+import { View, ScrollView, LayoutChangeEvent } from "react-native";
 import { CnpjProps } from "../../@types/cnpj";
 import { TextHeader, TextTitle, TextDescription } from "../../components/text";
 import { styles } from "./styles";
@@ -11,23 +10,17 @@ import theme from "../../utils/theme/theme"
 import { cnpjStatus } from "../../utils/cnpj/cnpjStatus";
 import { ComponentButton } from "../../components/button";
 import { shareAction } from "../../utils/cnpj/sharedAction";
+import { IconShare } from "../../components/icons/Icons";
 
 
 export function Result ({route}: any) {
     const cnpj: CnpjProps = route.params?.data
     const [situation_color, set_situation_color] = useState(theme.colors.black)
     const [loaded, setLoaded] = useState(false)
+    const dataHora = getDate()
 
-    function layoutloaded (layout: LayoutRectangle) 
-    {
-        if (layout.height && layout.width) 
-        {
-            console.log('layout loaded!')
-            setLoaded(true)
-        }
-    }
 
-    const situacao = (event: LayoutChangeEvent) => 
+    const situation = (event: LayoutChangeEvent) => 
     {
         let description_status = cnpj?.descricao_situacao_cadastral
 
@@ -52,16 +45,12 @@ export function Result ({route}: any) {
             set_situation_color(theme.description.none)
         }
 
-        const { layout } = event.nativeEvent
-        return layoutloaded(layout)
+        return event.nativeEvent.layout && setLoaded(true)
     }
 
-
-    return (
-        <View style={styles.container} onLayout={situacao}>
-        <Status />
-        {loaded ? 
-        
+    function HomeScreenContent () 
+    {
+        return (
             <ScrollView style={styles.cnjp_datails}>
 
                 <View style={styles.card}>
@@ -109,7 +98,7 @@ export function Result ({route}: any) {
                         <TextDescription text={`${cnpj?.ddd_telefone_1} - ${cnpj?.ddd_telefone_2}`} />
 
                         <TextTitle text="Data da Consulta" />
-                        <TextDescription text={getDate()} />
+                        <TextDescription text={dataHora} />
                         
                     </View>
                 </View>
@@ -166,23 +155,28 @@ export function Result ({route}: any) {
                     }
                 </View>
 
-                <ComponentButton.ButtonWrapper 
-                    style={[{...styles.button, backgroundColor: (theme.colors.blue)}]}
-                    onPress={() => shareAction(route.params?.data)}
-                >
-                    <ComponentButton.ButtonIcon icon={ <AntDesign name="search1" size={18} color={theme.colors.white} /> }/>
-                    <ComponentButton.ButtonText text={ 'Compartilhar '} style={styles.textButton}/>
-                </ComponentButton.ButtonWrapper>
-
             </ScrollView>
+        )
+    }
 
-        :
+    function Screen () {
+        return loaded ? <HomeScreenContent /> : <Loading size={32} color={theme.colors.blue} justify={"flex-start"}/> 
+    }
 
-            <Loading size={32} color={theme.colors.blue} justify={"flex-start"}/>
-        }
-        
 
+    return (
+        <View style={styles.container} onLayout={situation}>
+            <Status />
+            <Screen />
+            {
+                loaded && 
+                    <ComponentButton.ButtonWrapper 
+                        onPress={() => shareAction(cnpj, dataHora)}
+                        style={[{...styles.button, alignSelf: 'center', marginVertical: 5, backgroundColor: (theme.colors.black)}]}>
+                        <ComponentButton.ButtonIcon icon={ <IconShare /> }/>
+                        <ComponentButton.ButtonText text={ 'Compartilhar '} style={styles.textButton}/>
+                    </ComponentButton.ButtonWrapper>
+            }
         </View>
-
     )
 } 

@@ -25,12 +25,13 @@ export const styles = StyleSheet.create({
     },
 
     viewTitleCard: {
-        height: 50,
+        height: 32,
         width: '100%',
         backgroundColor: theme.colors.blue,
         borderRadius: 10,
         alignItems: 'center', justifyContent: 'center',
-        elevation: 10, shadowColor: theme.colors.black
+        elevation: 10, shadowColor: theme.colors.black,
+        overflow: "scroll"
 
     },
 
