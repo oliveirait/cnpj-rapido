@@ -10,3 +10,7 @@ export function IconHome () {
 export const IconShare = () => {
     return <Icon.MaterialCommunityIcons name="share-all" size={18} color={theme.colors.white} />
 }
+
+export const IconSearch = () => {
+    return <Icon.MaterialCommunityIcons name="search-web" size={18} color={theme.colors.white} />
+}

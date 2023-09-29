@@ -6,17 +6,16 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 import { styles } from "./styles";
 import { ComponentButton } from "../../components/button";
-import { CnpjProps } from "../../@types/cnpj"
-import { get_CNPJ } from "../../services/api";
+import { get_CEP } from "../../services/api";
 import { checkNetwork } from "../../utils/network";
 import { simpleAlert } from "../../utils/alerts/simple";
 import { Status } from "../../components/statusBar";
 import { Banner } from "../../components/banner";
 import theme from "../../utils/theme/theme";
 import { Loading } from "../../components/loading";
-import { cnpjMask } from "../../utils/masks";
-import { IconSearch } from "../../components/icons/Icons";
-import { cCNPJ } from "../../utils/constants";
+import { cepMask } from "../../utils/masks";
+import { CepProps } from "../../@types/cep";
+import { cCEP, cLENGTH_CEP } from "../../utils/constants";
 import { AxiosError } from "axios";
 
 
@@ -29,12 +28,12 @@ const appOpenAd = AppOpenAd.createForAdRequest(adUnitId,
 });
 
 
-export function Home () {
+export function CepScreen () {
     const [loaded, setLoaded] = useState(false)
-    const cLENGTH_CNPJ = 18
-    const [cnpj, setCnpj] = useState('')
+    const [cep, setCep] = useState('')
     const [loading, setLoading] = useState(false)
     const { navigate } = useNavigation()
+    const [result, setResult] = useState('')
 
     function layoutloaded (eventLoaded: LayoutChangeEvent) 
     {
@@ -45,13 +44,13 @@ export function Home () {
         }
     }
 
-    function goNextPage (data: CnpjProps) 
+    function goNextPage (data: CepProps) 
     {
-        navigate('result', {data: data})
+        navigate('cep', {data: data})
     }
 
     
-    async function getCnpjData (cep: string) 
+    async function getCepData (cep: string) 
     { 
         setLoading(true)
         const internet = await checkNetwork()
@@ -66,19 +65,20 @@ export function Home () {
         }
         
         const cep_replaced = cep.replace(/[/.-]/g, '')
-        if (cep_replaced.length === (cLENGTH_CNPJ-4))
+        if (cep_replaced.length === (cLENGTH_CEP-2))
         {
-          get_CNPJ.get(cep_replaced)
+          get_CEP.get(cep_replaced)
             .then((data) => 
-                goNextPage(data.data)
+                //goNextPage(data.data)
+                setResult(data.data)
             )
             .catch((e: AxiosError) => 
             {
-              if (AxiosError)
+              if (e.response?.status === 404)
               {
                 return simpleAlert(
                     {
-                        title: 'CNPJ não encontrado', 
+                        title: 'CEP não encontrado', 
                         description: 'Verifique se a numeração está correta.'
                     })
               }
@@ -87,8 +87,8 @@ export function Home () {
               {
                 return simpleAlert(
                     {
-                        title: 'Falha ao buscar CNPJ', 
-                        description: 'Ocorreu um erro inesperado ao buscar o CNPJ, tente novamente.'
+                        title: 'Falha ao buscar CEP', 
+                        description: 'Ocorreu um erro inesperado ao buscar o CEP, tente novamente.'
                     })
               }
 
@@ -104,7 +104,7 @@ export function Home () {
           simpleAlert(
           {
             title: '', 
-            description: 'Formato invalido ou CNPJ incorreto!'
+            description: 'Formato invalido ou CEP incorreto!'
           })
           setLoading(false)
         }
@@ -114,7 +114,7 @@ export function Home () {
     function inputText (input: string) 
     {
         const char = input.trim()
-        setCnpj(char.replace(cnpjMask.reg, cnpjMask.string))       
+        setCep(char.replace(cepMask.reg, cepMask.string))       
     }
 
     
@@ -131,6 +131,7 @@ export function Home () {
           }
           else if (!__DEV__  && !appOpenAd.loaded) 
           {
+            console.log('nao carregou, tentando novamente')
             appOpenAd.load()
           }
         }, 2000)
@@ -145,22 +146,22 @@ export function Home () {
                 { loaded ?
                 <>
                     <View style={styles.viewInput} >
-                        <Text style={styles.title}>Insira o {cCNPJ}</Text>
+                        <Text style={styles.title}>Insira o {cCEP}</Text>
 
                         <TextInput 
-                            placeholder="Digite ou cole o número do CNPJ"
-                            value={cnpj}
+                            placeholder={`Digite ou cole o número do ${cCEP}`}
+                            value={cep}
                             cursorColor={theme.colors.black}
                             onChangeText={inputText}
-                            maxLength={cLENGTH_CNPJ}
+                            maxLength={cLENGTH_CEP}
                             keyboardType="numeric"
                             style={styles.input}
                         />
 
                         <ComponentButton.ButtonWrapper 
-                            style={[{...styles.button, backgroundColor: cnpj.length !== cLENGTH_CNPJ ? theme.colors.disable : theme.colors.blue}]}
-                            onPress={() => getCnpjData(cnpj)} 
-                            disabled={cnpj.length !== cLENGTH_CNPJ ? true : false}
+                            style={[{...styles.button, backgroundColor: cep.length !== cLENGTH_CEP ? theme.colors.disable : theme.colors.blue}]}
+                            onPress={() => getCepData(cep)} 
+                            disabled={cep.length !== cLENGTH_CEP ? true : false}
                         >
                             <ComponentButton.ButtonIcon 
                                 icon={ loading 
@@ -173,18 +174,14 @@ export function Home () {
                             />
                         </ComponentButton.ButtonWrapper>
                     </View>
+                    <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                        <Text>{JSON.stringify(result)}</Text>
+                    </View>
 
                     {!__DEV__ &&
                     <View style={styles.viewBanner}>
                        <Banner />  
                     </View>}
-
-                    <ComponentButton.ButtonWrapper 
-                        onPress={() => navigate('cep')}
-                        style={[{...styles.button, alignSelf: 'center', marginVertical: 5, backgroundColor: (theme.colors.black)}]}>
-                        <ComponentButton.ButtonIcon icon={ <IconSearch /> }/>
-                        <ComponentButton.ButtonText text={ 'Consultar CEP '} style={styles.textButton}/>
-                    </ComponentButton.ButtonWrapper>
                 </>
                 : 
 
@@ -195,7 +192,3 @@ export function Home () {
         </>
     )
 }
-
-
-
-

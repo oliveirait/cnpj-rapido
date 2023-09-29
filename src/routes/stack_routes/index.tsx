@@ -1,11 +1,13 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Result } from "../../screens/02_result";
 import TabRoutes from "../tab_routes";
+import { CepScreen } from "../../screens/04_cep";
 
 const { Navigator, Screen } = createNativeStackNavigator()
 
 const headerMain = "Menu"
 const headerResult = 'Resultado'
+const headerCep = 'CEP'
 
 
 
@@ -34,6 +36,17 @@ const StackRoutes = () => {
                         headerShown: true, 
                         headerTitleAlign: 'center', 
                         title: headerResult
+                    }
+                }/>
+
+            <Screen 
+                name="cep"
+                component={CepScreen}
+                options={
+                    {
+                        headerShown: true, 
+                        headerTitleAlign: 'center', 
+                        title: headerCep
                     }
                 }/>
         </Navigator>

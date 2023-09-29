@@ -10,7 +10,7 @@ export function simpleAlert ({title, description}: SimpleAlertProps) {
         Alert.alert(
             `${title}`, 
             `${description}`,
-            [{text: 'OK'}],
+            [{text: `OK`}],
             {cancelable: true}
         )
     )

@@ -174,7 +174,7 @@ export function Result ({route}: any) {
                         onPress={() => shareAction(cnpj, dataHora)}
                         style={[{...styles.button, alignSelf: 'center', marginVertical: 5, backgroundColor: (theme.colors.black)}]}>
                         <ComponentButton.ButtonIcon icon={ <IconShare /> }/>
-                        <ComponentButton.ButtonText text={ 'Compartilhar '} style={styles.textButton}/>
+                        <ComponentButton.ButtonText text={ 'Compartilhar'} style={styles.textButton}/>
                     </ComponentButton.ButtonWrapper>
             }
         </View>

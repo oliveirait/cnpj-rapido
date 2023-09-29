@@ -5,6 +5,7 @@ export declare global {
             home: any
             historic: any
             result: any
+            cep: any
         }
     }
 }

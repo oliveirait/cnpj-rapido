@@ -10,8 +10,8 @@ export const cnpjMask = {
 }
 
 export const cepMask = {
-    reg: /^(\d{5})(\d{3})/, 
-    string: "$1-$2"
+    reg: /^(\d{2})(\d{3})(\d{3})/, 
+    string: "$1.$2-$3"
 }
 
 export const cnaeMask = {
