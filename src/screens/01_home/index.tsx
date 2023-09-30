@@ -5,7 +5,7 @@ import { AppOpenAd, TestIds } from "react-native-google-mobile-ads";
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 import { styles } from "./styles";
-import { ComponentButton } from "../../components/button";
+import { Btn } from "../../components/button";
 import { CnpjProps } from "../../@types/cnpj"
 import { get_CNPJ } from "../../services/api";
 import { checkNetwork } from "../../utils/network";
@@ -16,7 +16,7 @@ import theme from "../../utils/theme/theme";
 import { Loading } from "../../components/loading";
 import { cnpjMask } from "../../utils/masks";
 import { IconSearch } from "../../components/icons/Icons";
-import { cCNPJ } from "../../utils/constants";
+import { cCNPJ, cLENGTH_CNPJ } from "../../utils/constants";
 import { AxiosError } from "axios";
 
 
@@ -31,19 +31,16 @@ const appOpenAd = AppOpenAd.createForAdRequest(adUnitId,
 
 export function Home () {
     const [loaded, setLoaded] = useState(false)
-    const cLENGTH_CNPJ = 18
     const [cnpj, setCnpj] = useState('')
     const [loading, setLoading] = useState(false)
     const { navigate } = useNavigation()
 
-    function layoutloaded (eventLoaded: LayoutChangeEvent) 
+
+    function layoutloaded (event: LayoutChangeEvent) 
     {
-        if (eventLoaded.nativeEvent.layout) 
-        {
-            console.log('layout loaded!')
-            setLoaded(true)
-        }
+        return event.nativeEvent.layout && setLoaded(true)
     }
+
 
     function goNextPage (data: CnpjProps) 
     {
@@ -51,7 +48,7 @@ export function Home () {
     }
 
     
-    async function getCnpjData (cep: string) 
+    async function getCnpjData (cnpj: string) 
     { 
         setLoading(true)
         const internet = await checkNetwork()
@@ -65,10 +62,13 @@ export function Home () {
             )
         }
         
-        const cep_replaced = cep.replace(/[/.-]/g, '')
-        if (cep_replaced.length === (cLENGTH_CNPJ-4))
+        const cnpj_replaced = cnpj.replace(/[/.-]/g, '')
+        const new_cnpj = /^\D+$/.test(cnpj) //Nao contem numeros na string
+        console.log(new_cnpj)
+        
+        if ((cnpj_replaced.length === (cLENGTH_CNPJ-4)) && !new_cnpj)
         {
-          get_CNPJ.get(cep_replaced)
+          get_CNPJ.get(cnpj_replaced)
             .then((data) => 
                 goNextPage(data.data)
             )
@@ -157,21 +157,21 @@ export function Home () {
                             style={styles.input}
                         />
 
-                        <ComponentButton.ButtonWrapper 
+                        <Btn.Wrapper 
                             style={[{...styles.button, backgroundColor: cnpj.length !== cLENGTH_CNPJ ? theme.colors.disable : theme.colors.blue}]}
                             onPress={() => getCnpjData(cnpj)} 
                             disabled={cnpj.length !== cLENGTH_CNPJ ? true : false}
                         >
-                            <ComponentButton.ButtonIcon 
+                            <Btn.Icon 
                                 icon={ loading 
                                     ? <ActivityIndicator size={24} color={theme.colors.white}/> 
                                     : <AntDesign name="search1" size={18} color={theme.colors.white} /> 
                                 }/>
-                            <ComponentButton.ButtonText 
+                            <Btn.Text 
                                 text={ loading ? 'Buscando...' : 'Buscar' } 
                                 style={styles.textButton}
                             />
-                        </ComponentButton.ButtonWrapper>
+                        </Btn.Wrapper>
                     </View>
 
                     {!__DEV__ &&
@@ -179,12 +179,12 @@ export function Home () {
                        <Banner />  
                     </View>}
 
-                    <ComponentButton.ButtonWrapper 
+                    <Btn.Wrapper 
                         onPress={() => navigate('cep')}
                         style={[{...styles.button, alignSelf: 'center', marginVertical: 5, backgroundColor: (theme.colors.black)}]}>
-                        <ComponentButton.ButtonIcon icon={ <IconSearch /> }/>
-                        <ComponentButton.ButtonText text={ 'Consultar CEP '} style={styles.textButton}/>
-                    </ComponentButton.ButtonWrapper>
+                        <Btn.Icon icon={ <IconSearch /> }/>
+                        <Btn.Text text={ 'Consultar CEP '} style={styles.textButton}/>
+                    </Btn.Wrapper>
                 </>
                 : 
 

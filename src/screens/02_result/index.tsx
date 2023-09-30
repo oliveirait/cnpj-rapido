@@ -8,8 +8,8 @@ import { Status } from "../../components/statusBar";
 import { Loading } from "../../components/loading";
 import theme from "../../utils/theme/theme"
 import { cnpjStatus } from "../../utils/cnpj/cnpjStatus";
-import { ComponentButton } from "../../components/button";
-import { shareAction } from "../../utils/cnpj/sharedAction";
+import { Btn } from "../../components/button";
+import { shareActionCnpj } from "../../utils/cnpj/sharedActionCnpj";
 import { IconShare } from "../../components/icons/Icons";
 import { cepMask, cnaeMask, cnpjMask, telMask } from "../../utils/masks";
 
@@ -159,8 +159,21 @@ export function Result ({route}: any) {
         )
     }
 
-    function Screen () {
+    function Screen () 
+    {
         return loaded ? <HomeScreenContent /> : <Loading size={32} color={theme.colors.blue} justify={"flex-start"}/> 
+    }
+
+    function Button () 
+    {
+        return (
+            <Btn.Wrapper
+                onPress={() => shareActionCnpj(cnpj, dataHora)}
+                style={[{...styles.button, alignSelf: 'center', marginVertical: 5, backgroundColor: (theme.colors.black)}]}>
+                <Btn.Icon icon={ <IconShare /> }/>
+                <Btn.Text text={ 'Compartilhar'} style={styles.textButton}/>
+            </Btn.Wrapper>
+        )
     }
 
 
@@ -168,15 +181,7 @@ export function Result ({route}: any) {
         <View style={styles.container} onLayout={situation}>
             <Status />
             <Screen />
-            {
-                loaded && 
-                    <ComponentButton.ButtonWrapper 
-                        onPress={() => shareAction(cnpj, dataHora)}
-                        style={[{...styles.button, alignSelf: 'center', marginVertical: 5, backgroundColor: (theme.colors.black)}]}>
-                        <ComponentButton.ButtonIcon icon={ <IconShare /> }/>
-                        <ComponentButton.ButtonText text={ 'Compartilhar'} style={styles.textButton}/>
-                    </ComponentButton.ButtonWrapper>
-            }
+            {loaded && <Button />}
         </View>
     )
 } 

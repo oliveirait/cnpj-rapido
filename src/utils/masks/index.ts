@@ -5,7 +5,7 @@ export const telMask = {
 }
 
 export const cnpjMask = {
-    reg: /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, 
+    reg: /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, 
     string: "$1.$2.$3/$4-$5"
 }
 

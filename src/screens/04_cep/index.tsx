@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react"
-import { View, Text, TextInput, ActivityIndicator, LayoutChangeEvent } from "react-native"
+import { View, Text, TextInput, ActivityIndicator, LayoutChangeEvent, Button, Keyboard, TouchableOpacity, Linking, Share } from "react-native"
 import { AntDesign } from '@expo/vector-icons';
 import { AppOpenAd, TestIds } from "react-native-google-mobile-ads";
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 import { styles } from "./styles";
-import { ComponentButton } from "../../components/button";
+import { Btn } from "../../components/button";
 import { get_CEP } from "../../services/api";
 import { checkNetwork } from "../../utils/network";
 import { simpleAlert } from "../../utils/alerts/simple";
@@ -17,6 +17,9 @@ import { cepMask } from "../../utils/masks";
 import { CepProps } from "../../@types/cep";
 import { cCEP, cLENGTH_CEP } from "../../utils/constants";
 import { AxiosError } from "axios";
+import { SuperModal } from "../../components/super_modal";
+import * as Icon from '@expo/vector-icons';
+import { shareActionCep } from "../../utils/cep/sharedActionCep";
 
 
 
@@ -33,18 +36,16 @@ export function CepScreen () {
     const [cep, setCep] = useState('')
     const [loading, setLoading] = useState(false)
     const { navigate } = useNavigation()
-    const [result, setResult] = useState('')
+    const [result, setResult] = useState({} as CepProps)
+    const [modalState, setModalState] = useState(false)
 
-    function layoutloaded (eventLoaded: LayoutChangeEvent) 
+
+    function layoutloaded (event: LayoutChangeEvent) 
     {
-        if (eventLoaded.nativeEvent.layout) 
-        {
-            console.log('layout loaded!')
-            setLoaded(true)
-        }
+        return event.nativeEvent.layout && setLoaded(true)
     }
 
-    function goNextPage (data: CepProps) 
+    function goNextPage (data: CepProps)
     {
         navigate('cep', {data: data})
     }
@@ -65,12 +66,21 @@ export function CepScreen () {
         }
         
         const cep_replaced = cep.replace(/[/.-]/g, '')
-        if (cep_replaced.length === (cLENGTH_CEP-2))
+        const new_cep = /^\D+$/.test(cep) //Nao contem numeros na string
+        
+        if ((cep_replaced.length === (cLENGTH_CEP-2)) && !new_cep)
         {
           get_CEP.get(cep_replaced)
             .then((data) => 
-                //goNextPage(data.data)
-                setResult(data.data)
+                {
+                    setResult(data.data)
+                    Keyboard.dismiss()
+                    setTimeout(() => {
+
+                        setModalState(true)
+                    }, 100)
+                    
+                }
             )
             .catch((e: AxiosError) => 
             {
@@ -158,24 +168,26 @@ export function CepScreen () {
                             style={styles.input}
                         />
 
-                        <ComponentButton.ButtonWrapper 
+                        <Btn.Wrapper 
                             style={[{...styles.button, backgroundColor: cep.length !== cLENGTH_CEP ? theme.colors.disable : theme.colors.blue}]}
                             onPress={() => getCepData(cep)} 
                             disabled={cep.length !== cLENGTH_CEP ? true : false}
                         >
-                            <ComponentButton.ButtonIcon 
+                            <Btn.Icon 
                                 icon={ loading 
                                     ? <ActivityIndicator size={24} color={theme.colors.white}/> 
                                     : <AntDesign name="search1" size={18} color={theme.colors.white} /> 
                                 }/>
-                            <ComponentButton.ButtonText 
+                            <Btn.Text 
                                 text={ loading ? 'Buscando...' : 'Buscar' } 
                                 style={styles.textButton}
                             />
-                        </ComponentButton.ButtonWrapper>
+                        </Btn.Wrapper>
                     </View>
                     <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
-                        <Text>{JSON.stringify(result)}</Text>
+
+                        <Text> {JSON.stringify(result)} </Text>
+
                     </View>
 
                     {!__DEV__ &&
@@ -189,6 +201,82 @@ export function CepScreen () {
                 }
 
             </View>
+
+            <SuperModal isVisible={modalState}>
+                <View style={{
+                    alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff',
+                    borderRadius: 10, margin: 10, height: 500
+                }}>
+                    
+                    <View style={{
+                        flex: 0.8, backgroundColor: theme.colors.white,
+                        width: '90%', alignItems: 'flex-start',
+                        margin: 10
+                    }}>
+                        <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+                            <Text style={{color: theme.colors.blue, fontSize: 22, fontFamily: 'Bold'}}>
+                                CEP: { result?.cep } {/*CEP MODAL*/}
+                            </Text>
+                        </View>
+                        <View style={{width: '90%', justifyContent: 'center', alignItems: 'flex-start', marginVertical: 20, gap: 10}}>
+                            <Text style={{color: theme.colors.black, fontSize: 16, fontFamily: 'Regular'}}>
+                                Endereço: { result?.street }
+                            </Text>
+                            <Text style={{color: theme.colors.black, fontSize: 16, fontFamily: 'Regular'}}>
+                                Bairro: { result?.neighborhood }
+                            </Text>
+                            <Text style={{color: theme.colors.black, fontSize: 16, fontFamily: 'Regular'}}>
+                                Estado: { result?.city }
+                            </Text>
+                            <Text style={{color: theme.colors.black, fontSize: 16, fontFamily: 'Regular'}}>
+                                UF: { result?.state }
+                            </Text>
+                        </View>
+
+                    </View>
+
+                    <View style={{
+                        flex: 0.2, backgroundColor: theme.colors.blue,
+                        width: '100%'
+                    }}>
+                        <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly', flexDirection: 'row', }}>
+                            
+                            <TouchableOpacity 
+                                style={{alignItems: 'center'}} 
+                                onPress={() => Linking.openURL(`https://www.google.com.br/maps/search/${result?.cep}`)}
+                            >
+                                <Icon.MaterialCommunityIcons name="map-search" size={35} color={theme.colors.white} />
+                                <Text style={{color: theme.colors.white, fontFamily: 'Regular', fontSize: 12}}>
+                                    Google Maps
+                                </Text>
+                            </TouchableOpacity>
+                            
+                            <TouchableOpacity 
+                                style={{alignItems: 'center'}}
+                                onPress={() => shareActionCep(result)}    
+                            >
+                                <Icon.MaterialCommunityIcons name="share-all" size={35} color={theme.colors.white} />
+                                <Text style={{color: theme.colors.white, fontFamily: 'Regular', fontSize: 12}}>
+                                    Compartilhar
+                                </Text>
+                            </TouchableOpacity>
+                            
+                        </View>
+
+                    </View>
+    
+                        
+                    <View style={{margin: 20}}>
+                        <Btn.Wrapper 
+                            style={{...styles.button, width: 150, backgroundColor: theme.description.none}}
+                            onPress={() => setModalState(false)}
+                        >
+                            <Btn.Text text={'Fechar'} style={styles.textButton}/>
+                        </Btn.Wrapper>
+                    </View>
+                   
+                </View>
+            </SuperModal>
         </>
     )
 }
