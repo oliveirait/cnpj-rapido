@@ -1,11 +1,11 @@
 import { GestureResponderEvent } from "react-native"
 
-interface CNAE {
+export interface CNAE {
     codigo: number
     descricao: string
 }
   
-interface QSA {
+export interface QSA {
   identificador_de_socio: number
   nome_socio: string
   cnpj_cpf_do_socio: string

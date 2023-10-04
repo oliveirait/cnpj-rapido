@@ -4,7 +4,7 @@ import * as Icon from '@expo/vector-icons';
 
 
 export function IconHome () {
-    return <Icon.AntDesign name="home" size={24} color="black" />
+    return <Icon.AntDesign name="home" size={22} color="black" />
 }
 
 export const IconShare = () => {
@@ -21,4 +21,8 @@ export const IconView = () => {
 
 export const IconPhone = () => {
     return <Icon.MaterialCommunityIcons name="phone-check" size={20} color={'#2288bb'} />
+}
+
+export const IconHistoric = () => {
+    return <Icon.MaterialCommunityIcons name="history" size={24} color={'#2288bb'} />
 }

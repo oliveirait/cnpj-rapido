@@ -1,37 +1,17 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { Home } from '../../screens/01_home';
-import { IconHome } from '../../components/icons/Icons';
+import { IconHome, IconHistoric } from '../../components/icons/Icons';
+import { Historic } from '../../screens/03_historic';
 
 
 const { Navigator, Screen } = createDrawerNavigator()
-
-const screen = { 
-    home: {
-        pageName: 'home',
-        headerName: 'Início',
-        tabName: 'Início'
-    },
-
-    historic: {
-        pageName: 'historic',
-        headerName: 'Histórico',
-        tabName: 'Histórico'
-    },
-
-    result: {
-        pageName: 'result',
-        headerName: 'Resultado',
-        tabName: 'Resultado'
-    },
-}
-
 
 
 const TabRoutes = () => {
     return (
         <Navigator
-            initialRouteName={screen.home.pageName}
+            initialRouteName='home'
             screenOptions={{
                 headerTitleAlign: 'center',
                 headerTitleStyle: {fontFamily: 'Bold'},
@@ -39,12 +19,21 @@ const TabRoutes = () => {
             }}
         >       
             <Screen 
-                name={screen.home.pageName} 
+                name='home'
                 component={Home} 
                 options={{
-                    headerTitle: screen.home.headerName, 
-                    title: screen.home.tabName,
+                    headerTitle: 'INICIO',
+                    title: 'INICIO',
                     drawerIcon: IconHome                    
+                }}
+            />
+            <Screen 
+                name='historic'
+                component={Historic} 
+                options={{
+                    headerTitle: 'HISTORICO',
+                    title: 'HISTORICO',
+                    drawerIcon: IconHistoric                    
                 }}
             />
         </Navigator>

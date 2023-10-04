@@ -15,7 +15,6 @@ import { Banner } from "../../components/banner";
 import theme from "../../utils/theme/theme";
 import { Loading } from "../../components/loading";
 import { cnpjMask } from "../../utils/masks";
-import { IconSearch } from "../../components/icons/Icons";
 import { cCNPJ, cLENGTH_CNPJ } from "../../utils/constants";
 import { AxiosError } from "axios";
 

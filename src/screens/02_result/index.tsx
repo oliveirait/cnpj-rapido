@@ -10,7 +10,7 @@ import theme from "../../utils/theme/theme"
 import { cnpjStatus } from "../../utils/cnpj/cnpjStatus";
 import { Btn } from "../../components/button";
 import { shareActionCnpj } from "../../utils/cnpj/sharedActionCnpj";
-import { IconHome, IconPhone, IconShare, IconView } from "../../components/icons/Icons";
+import { IconPhone, IconShare, IconView } from "../../components/icons/Icons";
 import { cepMask, cnaeMask, cnpjMask, telMask } from "../../utils/masks";
 import { useNavigation } from '@react-navigation/native'
 import { checkNetwork } from "../../utils/network";
