@@ -1,4 +1,4 @@
-import { View, ScrollView, LayoutChangeEvent, TouchableOpacity, PermissionsAndroid, Linking } from "react-native";
+import { View, ScrollView, LayoutChangeEvent, TouchableOpacity, Linking } from "react-native";
 import { CnpjProps } from "../../@types/cnpj";
 import { TextHeader, TextTitle, TextDescription } from "../../components/text";
 import { styles } from "./styles";
@@ -24,8 +24,6 @@ export function Result ({route}: any) {
     const [loaded, setLoaded] = useState(false)
     const dataHora = getDate()
     const { navigate } = useNavigation()
-
-
 
 
     async function goNextPage (cepString: string) 
@@ -86,8 +84,8 @@ export function Result ({route}: any) {
         )
     }
 
-    function PhoneView () {
-
+    function PhoneView () 
+    {
         let phoneNumber = cnpj?.ddd_telefone_1.replace(telMask.reg, telMask.string)
         return (
             <TouchableOpacity
@@ -227,11 +225,11 @@ export function Result ({route}: any) {
         )
     }
 
-
     return (
         <View style={styles.container} onLayout={situation}>
             <Status />
             <Screen />
+            { loaded && <Button /> }
         </View>
     )
 } 

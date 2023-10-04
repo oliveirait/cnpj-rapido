@@ -178,13 +178,6 @@ export function Home () {
                     <View style={styles.viewBanner}>
                        <Banner />  
                     </View>}
-
-                    <Btn.Wrapper 
-                        onPress={() => navigate('cep')}
-                        style={[{...styles.button, alignSelf: 'center', marginVertical: 5, backgroundColor: (theme.colors.black)}]}>
-                        <Btn.Icon icon={ <IconSearch /> }/>
-                        <Btn.Text text={ 'Consultar CEP '} style={styles.textButton}/>
-                    </Btn.Wrapper>
                 </>
                 : 
 
