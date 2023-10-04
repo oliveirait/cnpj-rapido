@@ -24,7 +24,7 @@ export const TextTitle = ({text, ...rest}: PropsText) => {
 
 export const TextDescription = ({text, ...rest}: PropsText) => {
     return (
-        <Tx style={styles.textDescripionCard} {...rest}>
+        <Tx style={styles.textDescripionCard}  {...rest}>
             {text}
         </Tx>
     )

@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
 
     textDescripionCard: {
         fontFamily: 'Regular', fontSize: 12,
-        textAlign: 'center'
+        textAlign: 'center',
+        
     }
 })

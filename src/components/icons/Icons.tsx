@@ -14,3 +14,11 @@ export const IconShare = () => {
 export const IconSearch = () => {
     return <Icon.MaterialCommunityIcons name="search-web" size={18} color={theme.colors.white} />
 }
+
+export const IconView = () => {
+    return <Icon.MaterialCommunityIcons name="eye-circle" size={20} color={'#2288bb'} />
+}
+
+export const IconPhone = () => {
+    return <Icon.MaterialCommunityIcons name="phone-check" size={20} color={'#2288bb'} />
+}

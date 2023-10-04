@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { View, Text, TextInput, ActivityIndicator, LayoutChangeEvent, Button, Keyboard, TouchableOpacity, Linking, Share } from "react-native"
 import { AntDesign } from '@expo/vector-icons';
 import { AppOpenAd, TestIds } from "react-native-google-mobile-ads";
@@ -20,6 +20,7 @@ import { AxiosError } from "axios";
 import { SuperModal } from "../../components/super_modal";
 import * as Icon from '@expo/vector-icons';
 import { shareActionCep } from "../../utils/cep/sharedActionCep";
+import { TextDescription, TextHeader, TextTitle } from "../../components/text";
 
 
 
@@ -31,9 +32,9 @@ const appOpenAd = AppOpenAd.createForAdRequest(adUnitId,
 });
 
 
-export function CepScreen () {
+export function CepScreen ({route}: any) {
     const [loaded, setLoaded] = useState(false)
-    const [cep, setCep] = useState('')
+    const [cep, setCep] = useState(route.params?.data)
     const [loading, setLoading] = useState(false)
     const { navigate } = useNavigation()
     const [result, setResult] = useState({} as CepProps)
@@ -54,6 +55,7 @@ export function CepScreen () {
     async function getCepData (cep: string) 
     { 
         setLoading(true)
+
         const internet = await checkNetwork()
         if (!internet)
         {
@@ -148,6 +150,10 @@ export function CepScreen () {
       }, [appOpenAd.load])
     )
 
+    useEffect(() => {
+        getCepData(cep)
+    }, [])
+
     
     return (
             <>       
@@ -156,7 +162,7 @@ export function CepScreen () {
                 { loaded ?
                 <>
                     <View style={styles.viewInput} >
-                        <Text style={styles.title}>Insira o {cCEP}</Text>
+                        <Text style={styles.title}>Buscar {cCEP}</Text>
 
                         <TextInput 
                             placeholder={`Digite ou cole o número do ${cCEP}`}
@@ -184,11 +190,11 @@ export function CepScreen () {
                             />
                         </Btn.Wrapper>
                     </View>
-                    <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+                    {/*<View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
 
                         <Text> {JSON.stringify(result)} </Text>
 
-                    </View>
+                            </View>*/}
 
                     {!__DEV__ &&
                     <View style={styles.viewBanner}>
@@ -205,7 +211,7 @@ export function CepScreen () {
             <SuperModal isVisible={modalState}>
                 <View style={{
                     alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff',
-                    borderRadius: 10, margin: 10, height: 500
+                    borderRadius: 10, margin: 10, height: 420
                 }}>
                     
                     <View style={{
@@ -215,22 +221,26 @@ export function CepScreen () {
                     }}>
                         <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
                             <Text style={{color: theme.colors.blue, fontSize: 22, fontFamily: 'Bold'}}>
-                                CEP: { result?.cep } {/*CEP MODAL*/}
+                                CEP: { cep } {/*CEP MODAL*/}
                             </Text>
                         </View>
                         <View style={{width: '90%', justifyContent: 'center', alignItems: 'flex-start', marginVertical: 20, gap: 10}}>
-                            <Text style={{color: theme.colors.black, fontSize: 16, fontFamily: 'Regular'}}>
-                                Endereço: { result?.street }
-                            </Text>
-                            <Text style={{color: theme.colors.black, fontSize: 16, fontFamily: 'Regular'}}>
-                                Bairro: { result?.neighborhood }
-                            </Text>
-                            <Text style={{color: theme.colors.black, fontSize: 16, fontFamily: 'Regular'}}>
-                                Estado: { result?.city }
-                            </Text>
-                            <Text style={{color: theme.colors.black, fontSize: 16, fontFamily: 'Regular'}}>
-                                UF: { result?.state }
-                            </Text>
+                            <TextDescription
+                                text={`ENDEREÇO: \n${result?.street}`}
+                                style={{fontSize: 13, fontFamily: 'Regular'}}
+                            />
+                            <TextDescription
+                                text={`BAIRRO: \n${result?.neighborhood}`}
+                                style={{fontSize: 13, fontFamily: 'Regular'}}
+                            />
+                            <TextDescription
+                                text={`ESTADO: \n${result?.city}`}
+                                style={{fontSize: 13, fontFamily: 'Regular'}}
+                            />
+                            <TextDescription
+                                text={`UF: \n${result?.state}`}
+                                style={{fontSize: 13, fontFamily: 'Regular'}}
+                            />
                         </View>
 
                     </View>
