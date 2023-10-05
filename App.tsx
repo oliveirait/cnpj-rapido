@@ -6,7 +6,7 @@ import { getFonts } from "./src/utils/fonts";
 
 export default function App () 
 {
-    return getFonts ()
+    return getFonts () 
         ? <Routes /> 
         : <Loading size={18} color={theme.colors.blue} justify="flex-start"/>
 }

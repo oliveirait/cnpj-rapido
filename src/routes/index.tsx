@@ -7,7 +7,7 @@ export default function Routes () {
 
     function ready () 
     {
-        checkVersion()
+        checkVersion ()
     }
 
     return (
