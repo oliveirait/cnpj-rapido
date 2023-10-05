@@ -1,4 +1,4 @@
-import { View, ScrollView, LayoutChangeEvent, TouchableOpacity, Linking } from "react-native";
+import { View, ScrollView, LayoutChangeEvent, TouchableOpacity, Linking, Alert } from "react-native";
 import { CnpjProps } from "../../@types/cnpj";
 import { TextHeader, TextTitle, TextDescription } from "../../components/text";
 import { styles } from "./styles";
@@ -69,7 +69,6 @@ export function Result ({route}: any) {
 
         return event.nativeEvent.layout && setLoaded(true)
     }
-
 
     function CepView () 
     {

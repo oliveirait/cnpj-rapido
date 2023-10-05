@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { View, Text, TextInput, ActivityIndicator, LayoutChangeEvent } from "react-native"
+import { View, Text, TextInput, ActivityIndicator, LayoutChangeEvent, Alert } from "react-native"
 import { AntDesign } from '@expo/vector-icons';
 import { AppOpenAd, TestIds } from "react-native-google-mobile-ads";
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
@@ -17,6 +17,8 @@ import { Loading } from "../../components/loading";
 import { cnpjMask } from "../../utils/masks";
 import { cCNPJ, cLENGTH_CNPJ } from "../../utils/constants";
 import { AxiosError } from "axios";
+import { db } from "../../database";
+import uuid from 'react-native-uuid';
 
 
 
@@ -35,6 +37,41 @@ export function Home () {
     const { navigate } = useNavigation()
 
 
+    async function handleSaveCnpj (data: CnpjProps) 
+    {
+        const conn = await db()
+
+        try {
+            conn.write(() => {
+                conn.create('CnpjSchema', {
+                    _id: uuid.v4(),
+                    data: data
+                })
+            })
+
+            Alert.alert(
+                'Sucesso', 
+                `Dados salvos!`,
+                [
+                  {text: 'ok'}
+                ],
+                {cancelable: false}
+            )
+        }
+
+        catch {
+            Alert.alert(
+                'Erro', 
+                `Erro ao gravar os dados`,
+                [
+                  {text: 'ok'}
+                ],
+                {cancelable: false}
+            )
+        }
+    }
+
+
     function layoutloaded (event: LayoutChangeEvent) 
     {
         return event.nativeEvent.layout && setLoaded(true)
@@ -43,6 +80,7 @@ export function Home () {
 
     function goNextPage (data: CnpjProps) 
     {
+        handleSaveCnpj(data)
         navigate('result', {data: data})
     }
 
@@ -124,11 +162,11 @@ export function Home () {
         appOpenAd.load()
         setTimeout(() => 
         {    
-          if (!__DEV__  && appOpenAd.loaded) 
+          if (!__DEV__ && appOpenAd.loaded) 
           {
             appOpenAd.show()
           }
-          else if (!__DEV__  && !appOpenAd.loaded) 
+          else if (!__DEV__ && !appOpenAd.loaded) 
           {
             appOpenAd.load()
           }
@@ -181,6 +219,7 @@ export function Home () {
                 : 
 
                 <Loading size={32} color={theme.colors.blue} justify={"flex-start"}/>
+                
                 }
 
             </View>

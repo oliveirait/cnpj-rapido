@@ -1,4 +1,3 @@
-
 export const CnpjSchema = {
     name: "CnpjSchema",
     properties: 
@@ -8,4 +7,5 @@ export const CnpjSchema = {
     },
 
     primaryKey: "_id"
+    
 }
