@@ -8,21 +8,25 @@ export function IconHome () {
 }
 
 export const IconShare = () => {
-    return <Icon.MaterialCommunityIcons name="share-all" size={18} color={theme.colors.white} />
+    return <Icon.MaterialCommunityIcons name="share-all" size={18} color={theme.icons.white} />
 }
 
 export const IconSearch = () => {
-    return <Icon.MaterialCommunityIcons name="search-web" size={18} color={theme.colors.white} />
+    return <Icon.MaterialCommunityIcons name="search-web" size={18} color={theme.icons.white} />
 }
 
 export const IconView = () => {
-    return <Icon.MaterialCommunityIcons name="eye-circle" size={20} color={'#2288bb'} />
+    return <Icon.MaterialCommunityIcons name="eye-circle" size={20} color={theme.icons.blue_link} />
 }
 
 export const IconPhone = () => {
-    return <Icon.MaterialCommunityIcons name="phone-check" size={20} color={'#2288bb'} />
+    return <Icon.MaterialCommunityIcons name="phone-check" size={20} color={theme.icons.blue_link}  />
 }
 
 export const IconHistoric = () => {
-    return <Icon.MaterialCommunityIcons name="history" size={24} color={'#2288bb'} />
+    return <Icon.MaterialCommunityIcons name="history" size={24} color={theme.icons.blue_link}  />
+}
+
+export const IconGmaps = () => {
+    return <Icon.MaterialCommunityIcons name="map-search" size={20} color={theme.icons.blue_link} />
 }

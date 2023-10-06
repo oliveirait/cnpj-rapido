@@ -1,20 +1,17 @@
-import { View, ScrollView, LayoutChangeEvent, TouchableOpacity, Linking, Alert } from "react-native";
+import { View, ScrollView, LayoutChangeEvent, TouchableOpacity, Linking} from "react-native";
 import { CnpjProps } from "../../@types/cnpj";
 import { TextHeader, TextTitle, TextDescription } from "../../components/text";
 import { styles } from "./styles";
 import { formatCapital, formatDate, getDate } from "../../utils/date_currency_format";
 import React, { useState } from "react";
 import { Status } from "../../components/statusBar";
-import { Loading } from "../../components/loading";
 import theme from "../../utils/theme/theme"
 import { cnpjStatus } from "../../utils/cnpj/cnpjStatus";
 import { Btn } from "../../components/button";
 import { shareActionCnpj } from "../../utils/cnpj/sharedActionCnpj";
-import { IconPhone, IconShare, IconView } from "../../components/icons/Icons";
+import { IconGmaps, IconPhone, IconShare } from "../../components/icons/Icons";
 import { cepMask, cnaeMask, cnpjMask, telMask } from "../../utils/masks";
-import { useNavigation } from '@react-navigation/native'
-import { checkNetwork } from "../../utils/network";
-import { simpleAlert } from "../../utils/alerts/simple";
+import { Skelet } from "../../components/skelet/Skelet";
 
 
 
@@ -23,24 +20,7 @@ export function Result ({route}: any) {
     const [situation_color, set_situation_color] = useState(theme.colors.black)
     const [loaded, setLoaded] = useState(false)
     const dataHora = getDate()
-    const { navigate } = useNavigation()
 
-
-    async function goNextPage (cepString: string) 
-    {   
-        const internet = await checkNetwork()
-        if (!internet)
-        {
-            return simpleAlert(
-                {
-                    title: 'Sem internet', 
-                    description: 'Verifique sua conexão de rede'
-                }
-            )
-        }
-        
-        return navigate('cep', {data: cepString})
-    }
     
     const situation = (event: LayoutChangeEvent) => 
     {
@@ -67,7 +47,11 @@ export function Result ({route}: any) {
             set_situation_color(theme.description.none)
         }
 
-        return event.nativeEvent.layout && setLoaded(true)
+        return event.nativeEvent.layout && (() => {
+            setTimeout(() => {
+                setLoaded(true)
+            }, 300)
+        })()
     }
 
     function CepView () 
@@ -75,11 +59,12 @@ export function Result ({route}: any) {
         let cepView = String(cnpj?.cep).replace(cepMask.reg, cepMask.string)
         return (
             <TouchableOpacity
-                onPress={() => goNextPage(cepView)} 
+                onPress={() => Linking.openURL(`https://www.google.com.br/maps/search/CEP ${cnpj?.cep}`)} 
                 style={{justifyContent: 'space-around', flexDirection: 'row', alignItems: 'center', gap: 5, marginLeft: 20}}>
                 <TextDescription text={cepView} style={{color: '#2288bb', fontFamily: 'Bold', textDecorationLine: 'underline'}}/>
-                <IconView />
+                <IconGmaps />
             </TouchableOpacity>
+            
         )
     }
 
@@ -202,17 +187,11 @@ export function Result ({route}: any) {
                         })
                     }
                 </View>
-
             </ScrollView>
         )
     }
 
-    function Screen () 
-    {
-        return loaded ? <HomeScreenContent /> : <Loading size={32} color={theme.colors.blue} justify={"flex-start"}/> 
-    }
-
-    function Button () 
+    function ButtonShare () 
     {
         return (
             <Btn.Wrapper
@@ -224,11 +203,12 @@ export function Result ({route}: any) {
         )
     }
 
+
     return (
         <View style={styles.container} onLayout={situation}>
             <Status />
-            <Screen />
-            { loaded && <Button /> }
+            { loaded ? <HomeScreenContent /> : <Skelet /> }
+            { loaded && <ButtonShare /> }
         </View>
     )
 } 

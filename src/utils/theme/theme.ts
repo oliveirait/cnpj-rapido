@@ -14,6 +14,11 @@ export const theme = {
         inactive: "#c70700",
         low: "#b90057",
         none: "#5a5a5a"
+    },
+
+    icons: {
+        white: '#fff',
+        blue_link: '#2288bb'
     }
 }
 
