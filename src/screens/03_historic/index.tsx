@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, LayoutChangeEvent, TouchableOpacity } from "react-native"
+import { View, Text, StyleSheet, FlatList, LayoutChangeEvent, TouchableOpacity, Alert, ToastAndroid } from "react-native"
 import { Status } from "../../components/statusBar"
 import { RealmDB } from "../../database"
 import { CnpjAllProps } from "../01_home"
@@ -6,8 +6,9 @@ import { cnpjMask } from "../../utils/masks"
 import { SkeletHistory } from "../../components/skelet/SkeletHistory"
 import { AxiosError } from "axios"
 import { get_CNPJ } from "../../services/api"
-import { useNavigation } from '@react-navigation/native'
-import { useState } from "react"
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
+import { useCallback, useState } from "react"
+import { EmptyHistory } from "../../components/empty/EmptyHistory"
 
 
 export function Historic () {
@@ -22,6 +23,7 @@ export function Historic () {
             {
                 const posts = database.objects<CnpjAllProps[]>("CnpjSchema").toJSON()
                 setHistory(posts.reverse())
+                setLoaded(true)
             })
             
             .catch((err) => 
@@ -30,13 +32,46 @@ export function Historic () {
             })
     } 
 
-    async function layoutloaded (event: LayoutChangeEvent) 
-    {
-        getReposHistory()
+    function confirmDelete (id: string) {
+        Alert.alert(
+            'Excluir',
+            'Deseja excluir este registro?',
+            [
+                {text: 'Nao'},
+                {text: 'Sim', onPress: () => removeCnpjFromHistory(id)}
+            ],
+            {cancelable: false}
+        )
+    }
 
-        event.nativeEvent.layout && setTimeout(() => {
-            (() => setLoaded(true))()
-        }, 200)
+    async function removeCnpjFromHistory (id: string) {
+        setLoaded(true)
+        await RealmDB()
+            .then((database) => 
+            {
+                const collection = database.objects('CnpjSchema')
+                const objectFiltered = collection.filtered(`_id = '${id}'`)
+
+                if (objectFiltered)
+                {
+                    setLoaded(false)
+
+                    setTimeout(() => {
+                        database.write(() => {
+                            database.delete(objectFiltered)
+                        })
+
+                        getReposHistory()
+                        ToastAndroid.show(`Registro excluido com sucesso!`, ToastAndroid.SHORT)
+                        setLoaded(false)
+                    }, 100)
+                }
+            })
+
+            .catch((err) => 
+            {
+                console.log(err)
+            })
     }
 
     function goResult (data: CnpjAllProps)
@@ -57,19 +92,31 @@ export function Historic () {
             })
     }
 
+    useFocusEffect(
+        useCallback(() => {
+            getReposHistory()
+        }, [])
+    )
 
     return (
-        <View style={styles.container} onLayout={layoutloaded}>
+        <View style={styles.container}>
             <Status />
-            {loaded ?
+            { loaded ?
                 <FlatList 
                     initialNumToRender={10}
+                    maxToRenderPerBatch={5}
+                    ListEmptyComponent={EmptyHistory}
                     showsVerticalScrollIndicator={false}
                     data={history}
+                    style={{width: '100%', height: '100%'}}
                     keyExtractor={(item: CnpjAllProps) => item._id}
                     renderItem={({item}) => 
-                        <TouchableOpacity style={styles.view} onPress={() => getCnpjData(item.cnpj)}>
-                            
+
+                        <TouchableOpacity 
+                            style={styles.view} 
+                            onPress={() => getCnpjData(item.cnpj)}
+                            onLongPress={() => confirmDelete(item?._id)}
+                        >
                             <View>
                                 <Text style={styles.title}>RAZAO SOCIAL</Text>
                                 <Text style={styles.description}>{item?.razao_social}</Text>
@@ -91,7 +138,7 @@ export function Historic () {
                             </View>
                         </TouchableOpacity>
                     }
-                    style={{width: '100%'}}
+                    
                 
                 />
             :

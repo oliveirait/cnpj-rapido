@@ -9,11 +9,11 @@ export function SkeletHistory () {
             backgroundColor: '#fff',
             alignItems: 'center', justifyContent: 'flex-start',
             gap: 5,
-            padding: 20,
-            elevation: 10, shadowColor: '#000'
+            padding: 10,
+            elevation: 5, shadowColor: '#000'
         }}>
             <View style={{
-                height: 150,
+                height: 180,
                 width: '90%',
                 backgroundColor: '#f1f1f1',
                 borderRadius: 15,
@@ -21,11 +21,11 @@ export function SkeletHistory () {
                 gap: 5,
                 padding: 20,
                 margin: 10,
-                elevation: 10, shadowColor: '#000'
+                elevation: 5, shadowColor: '#000'
             }}></View>
 
             <View style={{
-                height: 150,
+                height: 180,
                 width: '90%',
                 backgroundColor: '#f1f1f1',
                 borderRadius: 15,
@@ -33,11 +33,11 @@ export function SkeletHistory () {
                 gap: 5,
                 padding: 20,
                 margin: 10,
-                elevation: 10, shadowColor: '#000'
+                elevation: 5, shadowColor: '#000'
             }}></View>
 
             <View style={{
-                height: 150,
+                height: 180,
                 width: '90%',
                 backgroundColor: '#f1f1f1',
                 borderRadius: 15,
@@ -45,7 +45,7 @@ export function SkeletHistory () {
                 gap: 5,
                 padding: 20,
                 margin: 10,
-                elevation: 10, shadowColor: '#000'
+                elevation: 5, shadowColor: '#000'
             }}></View>
 
         <View style={{
@@ -57,7 +57,7 @@ export function SkeletHistory () {
                 gap: 5,
                 padding: 20,
                 margin: 10,
-                elevation: 10, shadowColor: '#000'
+                elevation: 5, shadowColor: '#000'
             }}></View>        
 
         <View style={{
@@ -69,7 +69,7 @@ export function SkeletHistory () {
                 gap: 5,
                 padding: 20,
                 margin: 10,
-                elevation: 10, shadowColor: '#000'
+                elevation: 5, shadowColor: '#000'
             }}></View>               
 
         </View>        
