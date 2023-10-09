@@ -1,7 +1,7 @@
 import { View, ScrollView, LayoutChangeEvent, TouchableOpacity, Linking} from "react-native";
 import { TextHeader, TextTitle, TextDescription } from "../../components/text";
 import { styles } from "./styles";
-import { formatCapital, formatDate } from "../../utils/date_currency_format";
+import { formatCapital, formatDate, getDate } from "../../utils/date_currency_format";
 import React, { useState } from "react";
 import { Status } from "../../components/statusBar";
 import theme from "../../utils/theme/theme"
@@ -19,6 +19,7 @@ export function Result ({route}: any) {
     const cnpj: CnpjAllProps = route.params?.data
     const [situation_color, set_situation_color] = useState(theme.colors.black)
     const [loaded, setLoaded] = useState(false)
+    const dataHora = String(getDate())
 
     
     const situation = (event: LayoutChangeEvent) => 
@@ -49,7 +50,7 @@ export function Result ({route}: any) {
         return event.nativeEvent.layout && (() => {
             setTimeout(() => {
                 setLoaded(true)
-            }, 300)
+            }, 100)
         })()
     }
 
@@ -130,7 +131,7 @@ export function Result ({route}: any) {
                         { cnpj?.ddd_telefone_1 && <PhoneView /> }
 
                         <TextTitle text="Data da Consulta" />
-                        <TextDescription text={cnpj?.data_consulta} />
+                        <TextDescription text={dataHora} />
                         
                     </View>
                 </View>
