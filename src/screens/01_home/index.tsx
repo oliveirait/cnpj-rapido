@@ -114,7 +114,7 @@ export function Home () {
             )
             .catch((e: AxiosError) => 
             {
-              if (AxiosError)
+              if (e)
               {
                 return simpleAlert(
                     {
