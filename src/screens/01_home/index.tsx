@@ -17,11 +17,19 @@ import { Loading } from "../../components/loading";
 import { cnpjMask } from "../../utils/masks";
 import { cCNPJ, cLENGTH_CNPJ } from "../../utils/constants";
 import { AxiosError } from "axios";
-import { db } from "../../database";
+import { RealmDB } from "../../database";
 import uuid from 'react-native-uuid';
 import { getDate } from "../../utils/date_currency_format";
 
 
+export interface CnpjAllProps extends CnpjProps {
+    _id: string
+    razao_social: string
+    nome_fantasia: string
+    cnpj: string
+    data_consulta: string
+    descricao_situacao_cadastral: string
+}
 
 const adUnitId = __DEV__ ? TestIds.APP_OPEN : 'ca-app-pub-2213444535919704/1325028330';
 const appOpenAd = AppOpenAd.createForAdRequest(adUnitId, 
@@ -38,9 +46,9 @@ export function Home () {
     const { navigate } = useNavigation()
 
 
-    async function handleSaveCnpj (data: CnpjProps) 
+    async function handleSaveCnpj (data?: CnpjAllProps) 
     {
-        const database = await db()
+        const database = await RealmDB()
         const dataHora = String(getDate())
         const cnpj_details = {
             _id: uuid.v4(),
@@ -56,6 +64,7 @@ export function Home () {
             database.write(() => {
                 database.create('CnpjSchema', cnpj_details)
             })
+            console.log('HISTORICO CRIADO COM SUCESSO!')
         }
 
         catch (e) 
@@ -68,8 +77,11 @@ export function Home () {
                 ],
                 {cancelable: false}
             )
-
             console.log(JSON.stringify(e))
+        }
+
+        finally {
+            database.close()
         }
     }
 
@@ -80,7 +92,7 @@ export function Home () {
     }
 
 
-    function goNextPage (data: CnpjProps) 
+    function goNextPage (data: CnpjAllProps) 
     {
         handleSaveCnpj(data)
         //
@@ -94,6 +106,7 @@ export function Home () {
         const internet = await checkNetwork()
         if (!internet)
         {
+            setLoading(false)
             return simpleAlert(
                 {
                     title: 'Sem internet', 
@@ -116,6 +129,7 @@ export function Home () {
             {
               if (e)
               {
+                setLoading(false)
                 return simpleAlert(
                     {
                         title: 'CNPJ não encontrado', 
@@ -125,6 +139,7 @@ export function Home () {
 
               else 
               {
+                setLoading(false)
                 return simpleAlert(
                     {
                         title: 'Falha ao buscar CNPJ', 
@@ -141,12 +156,13 @@ export function Home () {
 
         else
         {
-          simpleAlert(
-          {
-            title: '', 
-            description: 'Formato invalido ou CNPJ incorreto!'
-          })
-          setLoading(false)
+            setLoading(false)
+            simpleAlert(
+            {
+                title: '', 
+                description: 'Formato invalido ou CNPJ incorreto!'
+            })
+          
         }
     } 
 

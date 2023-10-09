@@ -1,8 +1,7 @@
 import { View, ScrollView, LayoutChangeEvent, TouchableOpacity, Linking} from "react-native";
-import { CnpjProps } from "../../@types/cnpj";
 import { TextHeader, TextTitle, TextDescription } from "../../components/text";
 import { styles } from "./styles";
-import { formatCapital, formatDate, getDate } from "../../utils/date_currency_format";
+import { formatCapital, formatDate } from "../../utils/date_currency_format";
 import React, { useState } from "react";
 import { Status } from "../../components/statusBar";
 import theme from "../../utils/theme/theme"
@@ -11,15 +10,15 @@ import { Btn } from "../../components/button";
 import { shareActionCnpj } from "../../utils/cnpj/sharedActionCnpj";
 import { IconGmaps, IconPhone, IconShare } from "../../components/icons/Icons";
 import { cepMask, cnaeMask, cnpjMask, telMask } from "../../utils/masks";
-import { Skelet } from "../../components/skelet/Skelet";
+import { Skelet } from "../../components/skelet/SkeletResult";
+import { CnpjAllProps } from "../01_home";
 
 
 
 export function Result ({route}: any) {
-    const cnpj: CnpjProps = route.params?.data
+    const cnpj: CnpjAllProps = route.params?.data
     const [situation_color, set_situation_color] = useState(theme.colors.black)
     const [loaded, setLoaded] = useState(false)
-    const dataHora = getDate()
 
     
     const situation = (event: LayoutChangeEvent) => 
@@ -131,7 +130,7 @@ export function Result ({route}: any) {
                         { cnpj?.ddd_telefone_1 && <PhoneView /> }
 
                         <TextTitle text="Data da Consulta" />
-                        <TextDescription text={dataHora} />
+                        <TextDescription text={cnpj?.data_consulta} />
                         
                     </View>
                 </View>
@@ -195,7 +194,7 @@ export function Result ({route}: any) {
     {
         return (
             <Btn.Wrapper
-                onPress={() => shareActionCnpj(cnpj, dataHora)}
+                onPress={() => shareActionCnpj(cnpj)}
                 style={[{...styles.button, alignSelf: 'center', marginVertical: 5, backgroundColor: (theme.colors.black)}]}>
                 <Btn.Icon icon={ <IconShare /> }/>
                 <Btn.Text text={ 'Compartilhar'} style={styles.textButton}/>

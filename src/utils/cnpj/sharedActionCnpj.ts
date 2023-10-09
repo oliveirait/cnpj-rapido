@@ -2,9 +2,10 @@ import { Share } from "react-native";
 import { CnpjProps } from "../../@types/cnpj";
 import { formatCapital, formatDate } from "../date_currency_format";
 import { cepMask, cnpjMask, telMask } from "../masks";
+import { CnpjAllProps } from "../../screens/01_home";
 
 
-export async function shareActionCnpj (data: CnpjProps, dataHora: string) 
+export async function shareActionCnpj (data: CnpjAllProps) 
 {
     const cnpjData = `
 EMPRESA: ${data?.razao_social}
@@ -20,7 +21,7 @@ BAIRRO: ${data?.bairro}
 MUNICÍPIO: ${data?.municipio}
 CEP: ${String(data?.cep).replace(cepMask.reg, cepMask.string)}
 TELEFONE: ${data?.ddd_telefone_1.replace(telMask.reg, telMask.string)}
-DATA DA CONSULTA: ${dataHora}
+DATA DA CONSULTA: ${data?.data_consulta}
 
 Dados recebidos a partir do aplicativo CNPJ Consulta:
 https://play.google.com/store/apps/details?id=com.oliveirafocs.cnpjrapido

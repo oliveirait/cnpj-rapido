@@ -44,14 +44,15 @@ export const styles = StyleSheet.create({
         marginVertical: 10,
         gap: 5,
         padding: 10,
-        elevation: 10, shadowColor: theme.colors.black
+        elevation: 10, shadowColor: theme.colors.black,
+        
     },
 
     textTitleHeader: {
         textAlign: 'center',
         color: theme.colors.white,
         fontFamily: 'Bold',
-        fontSize: 18
+        fontSize: 18,
     },
 
     textTitleCard: {

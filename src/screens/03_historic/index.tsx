@@ -1,59 +1,106 @@
-import { View, Text, StyleSheet, FlatList, LayoutChangeEvent } from "react-native"
-import { CNPJ } from "../../@types/cnpj/index2"
-import { getDate } from "../../utils/date_currency_format"
+import { View, Text, StyleSheet, FlatList, LayoutChangeEvent, TouchableOpacity } from "react-native"
 import { Status } from "../../components/statusBar"
-import { useEffect, useState } from "react"
-import { CnpjProps } from "../../@types/cnpj"
+import { RealmDB } from "../../database"
+import { CnpjAllProps } from "../01_home"
+import { cnpjMask } from "../../utils/masks"
+import { SkeletHistory } from "../../components/skelet/SkeletHistory"
+import { AxiosError } from "axios"
+import { get_CNPJ } from "../../services/api"
+import { useNavigation } from '@react-navigation/native'
+import { useState } from "react"
+
 
 export function Historic () {
     const [loaded, setLoaded] = useState(false)
-    const [history, setHistory] = useState(CNPJ)
+    const [history, setHistory] = useState<any>([])
+    const { navigate } = useNavigation()
 
-    function layoutloaded (event: LayoutChangeEvent) 
-    {
-        return event.nativeEvent.layout && (() => {
-            setLoaded(true)
-        })()
-    }
     
+    async function getReposHistory () {
+        await RealmDB()
+            .then((database) => 
+            {
+                const posts = database.objects<CnpjAllProps[]>("CnpjSchema").toJSON()
+                setHistory(posts.reverse())
+            })
+            
+            .catch((err) => 
+            {
+                console.log('ERRO AO BUSCAR DADOS DO CNPJ NO BANCO ===> ', err)
+            })
+    } 
+
+    async function layoutloaded (event: LayoutChangeEvent) 
+    {
+        getReposHistory()
+
+        event.nativeEvent.layout && setTimeout(() => {
+            (() => setLoaded(true))()
+        }, 200)
+    }
+
+    function goResult (data: CnpjAllProps)
+    {
+        navigate('result', {data: data})
+    }
+
+    async function getCnpjData (cnpj: string)
+    { 
+        get_CNPJ.get(cnpj)
+            .then((data) => {
+                goResult(data.data)
+            })
+
+            .catch((e: AxiosError) => 
+            {
+                console.log('Erro ao buscar CNPJ')
+            })
+    }
 
 
     return (
         <View style={styles.container} onLayout={layoutloaded}>
             <Status />
             {loaded ?
-            <>  
                 <FlatList 
+                    initialNumToRender={10}
                     showsVerticalScrollIndicator={false}
-                    data={history.map((item) => item)}
-                    keyExtractor={i => i.cnpj}
+                    data={history}
+                    keyExtractor={(item: CnpjAllProps) => item._id}
                     renderItem={({item}) => 
-                        <View style={styles.view}>
-                            <Text style={styles.description}>{`Nome: ${item.razao_social}`}</Text>
-                            <Text style={styles.description}>{`CNPJ: ${item.cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5")}`}</Text>
-                            <Text style={styles.description}>{`Data da consulta: ${getDate()}`}</Text>
-                            <Text style={styles.description}>{`Status: ${item.descricao_situacao_cadastral}`}</Text>
-                        </View>
+                        <TouchableOpacity style={styles.view} onPress={() => getCnpjData(item.cnpj)}>
+                            
+                            <View>
+                                <Text style={styles.title}>RAZAO SOCIAL</Text>
+                                <Text style={styles.description}>{item?.razao_social}</Text>
+                            </View>
+
+                            <View>
+                                <Text style={styles.title}>CNPJ</Text>
+                                <Text style={styles.description}>{item?.cnpj.replace(cnpjMask.reg, cnpjMask.string)}</Text>
+                            </View>
+
+                            <View>
+                                <Text style={styles.title}>DATA DA CONSULTA</Text>
+                                <Text style={styles.description}>{item?.data_consulta}</Text>
+                            </View>
+
+                            <View>
+                                <Text style={styles.title}>STATUS</Text>
+                                <Text style={styles.description}>{item?.descricao_situacao_cadastral}</Text>
+                            </View>
+                        </TouchableOpacity>
                     }
                     style={{width: '100%'}}
+                
                 />
-            </>
             :
-                <View style={{
-                    backgroundColor: '#fff',
-                    borderRadius: 15,
-                    alignItems: 'flex-start', justifyContent: 'center',
-                    gap: 5,
-                    padding: 20,
-                    margin: 10,
-                    elevation: 10, shadowColor: '#000'
-                }}>
-
-                </View>
+                <SkeletHistory />
             }
         </View>
     )
 }
+
 
 
 const styles = StyleSheet.create({
@@ -69,12 +116,14 @@ const styles = StyleSheet.create({
 
     title: 
     {
-        fontFamily: 'Bold'
+        fontFamily: 'Bold',
+        fontSize: 12
     },
 
     description: 
     {
-        fontFamily: 'Regular'
+        fontFamily: 'Regular',
+        fontSize: 12
     },
 
     view: 
@@ -83,10 +132,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 15,
         alignItems: 'flex-start', justifyContent: 'center',
-        gap: 5,
+        gap: 10,
         padding: 20,
         margin: 10,
-        elevation: 10, shadowColor: '#000'
+        elevation: 10, shadowColor: '#000',
+        
     },
 
 
